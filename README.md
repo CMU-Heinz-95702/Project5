@@ -22,6 +22,8 @@ the Canvas module labelled "Distributed Computation".
 
 **How will you be graded?**
 
+Note: We will assume, unless otherwise noted, that all problems operating on text data are case sensitive. The letters "E" and "e" are two different letters.
+
 You need to post a single pdf file to Canvas and provide your Heinz cluster password by taking the online quiz. You will make a Heinz cluster account available for inspection by the grader. The pdf will be clearly labelled. Your name and email will be at the top. ***Be sure to order and label the pdf
 sections as described in the next 6 steps.***
 
