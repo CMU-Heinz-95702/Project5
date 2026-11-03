@@ -634,42 +634,63 @@ Copy CountWords.java into the Task0 directory.
 
 From within Task0 do:
 
+```bash
 cp /home/public/WordCount.java WordCount.java
 
+```
 
 Compile the application.
 
+```bash
 javac -classpath "$(hadoop classpath)" -d . WordCount.java
+
+```
 
 Create a jar (Java archive) file
 
+```
 jar -cvf wordcount.jar edu
 
-We need input on HDFS:
+```
+
+We need input placed on HDFS.
 
 Make the input directory on our local system:
 
+```bash
 mkdir -p /home/student/input
+```
 
 Put some text in the input directory:
 
+```bash
 printf "dog cat dog dog\n" > /home/student/input/test.txt
+
+```
 
 Make a directory to hold the input on HDFS:
 
+```
 hdfs dfs -mkdir -p /user/student/task0/input
+```
 
-Copy our local input the HDFS:
+Copy our local input to HDFS:
 
+```
 hdfs dfs -copyFromLocal -f /home/student/input/test.txt /user/student/task0/input
+```
 
 Remove any old output from HDFS:
 
+```
 hdfs dfs -rm -r -f /user/student/task0/output
+```
 
-Deploy and execute the jar file to HDFS:
+Deploy and execute the jar.
 
+```bash
 hadoop jar wordcount.jar edu.cmu.project5.task0.WordCount /user/student/task0/input /user/student/task0/output
+```
 
 
 After the job completes, examine the output stored on HDFS:
@@ -678,13 +699,26 @@ After the job completes, examine the output stored on HDFS:
 hdfs dfs -cat /user/student/output/part-r-00000
 ```
 
-Merge the reducer output into a local file in a directory named output:
+Merge the reducer output into a local file in a directory named output.
+Firs, create output.
 
+```
 mkdir -p output
 
+```
+
+Merge the results back to our local system.
+
+```
 hdfs dfs -getmerge /user/student/task0/output output/result.txt
 
+```
+View the results.
+
+```
 cat output/result.txt
+```
+
 ---
 
 ## Deliverables
@@ -699,6 +733,8 @@ The grader will examine:
 You may use a large language model or web resources for this task.
 
 Any external assistance must be documented within your source code comments.
+
+Be sure to document WordCount.java with your own words describing what is going on.
 
 ---
 
