@@ -1,852 +1,709 @@
-#  95-702 Distributed Systems For Information Systems Management
-#  Distributed Computation
-## Project 5 Spring 2026
+# 95-702 Distributed Systems for Information Systems Management
+# Project 5 - Distributed Computation
+## Fall 2026
 
-Assigned: Monday, April 6, 2026
+Assigned: Monday, November 16, 2026
 
-Due: Monday, April 20, 2026, 11:59 PM
+Due: Monday, November 30, 2026, 11:59 PM
 
-**Principles**
+---
+# Introduction
 
-Big data infrastructures support distributed computation through services
-such as MapReduce and Spark. Both of these approaches exemplify the
-principle of spatial locality by moving computation close to data. These
-data are then processed in parallel.
+Big data infrastructures support distributed computation through services such as MapReduce and Spark.
 
-**Learning objectives**
+Both approaches exemplify the principle of spatial locality by moving computation close to data. Large datasets can then be processed in parallel while minimizing data movement.
 
-The student will be able to program applications using MapReduce and Spark.
-For those new to Linux, this project will also expose you to compiling and running Java programs in a Linux environment.
-There is introductory Linux material on Canvas. See the "linuxTutorial.mp4" and the "Unix command Quick List" files in
-the Canvas module labelled "Distributed Computation".
+In Part 1 of this project, you will develop and execute MapReduce applications using Hadoop running inside the Docker environment introduced in Lab 9. If you did not complete lab 9, you may do so now. Or, you might complete it again so
+that you are familiar with the environment.
 
-**How will you be graded?**
+In Part 2 of this project, you will use Apache Spark running locally within IntelliJ.
 
-Note: We will assume, unless otherwise noted, that all problems operating on text data are case sensitive. The letters "E" and "e" are two different letters.
+This project builds directly on the work completed in Lab 9. You will use the same Docker-based Hadoop environment, the same HDFS workflow, and the same Hadoop 3.x programming model that were introduced in the lab.
 
-You need to post a single pdf file to Canvas and provide your Heinz cluster password by taking the online quiz. You will make a Heinz cluster account available for inspection by the grader. The pdf will be clearly labelled. Your name and email will be at the top. ***Be sure to order and label the pdf
-sections as described in the next 6 steps.***
+---
 
-Please organize your pdf file so that the grader can evaluate your work.
+# Learning Objectives
 
-Using the pdf, the grader will:
+After completing this project, you will be able to:
 
-1. Open your single pdf file on Canvas.
-2. Look at the screen shot of Google Earth from Part 1, Task 7.
-3. Look at your single Spark program from Part 2. This will be graded based on documentation and execution.
-4. Look at the output screenshot of Part 2. This is the entire Part 2 execution. It is not just the interactive piece. It includes the print statements from all of the Part 2 tasks.
-5. Look at your Heinz cluster user ID (studentxxx). This is labelled and in the pdf.
-6. Look at your Heinz cluster password. This is also labelled and in the pdf.
+* Develop MapReduce applications in Java using the Hadoop 3.x API.
+* Execute MapReduce jobs using Hadoop and HDFS.
+* Transfer data between Linux filesystems and HDFS.
+* Analyze large datasets using distributed computation.
+* Develop Spark applications using Java.
+* Perform distributed data analytics with Spark.
+* Work productively in a Linux environment.
 
-The grader will then use the Heinz cluster to:
+---
 
-7. Log on to your Heinz cluster account. He or she will need the password from the pdf.
-8. cd into Project5 and cd into Part_1.
-9. cd into a task and grade it based upon
-correct execution and documentation. All files, as described below,
-should be available for inspection by the grader. In particular, the grader will be looking for the output files that resulted from the merge operations. The HDFS input and output directories on the cluster will be empty. The grader will be able to copy the input file to the cluster (using copyFromLocal) and will be able to deploy and execute the jar file without first having to delete the HDFS output directory. The input file, source code, and other task related artifacts will be available in the directory Project5/Part_1/TaskX (where X = 0,1,2,3,4,5,6,7).
+# Academic Integrity
 
+Unless explicitly prohibited in an individual task, you may use:
 
-**These notes are for later reference**
+* Large language models
+* Web resources
+* Books and documentation
 
-When documenting your code, follow the Documentation Example shown in the Course Information Module on Canvas.
+You are responsible for understanding all submitted work.
 
-[Documentation Example](./Documentation.md)
+Any use of external resources must be documented within your source code.
 
-Your well documented programs will always begin with a block of comments
-(using Javadoc style or regular style) that provide the name of the programmer and the purpose of the program.
+Tasks that prohibit external assistance must be completed without:
 
-On the Heinz High Performance Cluster, we will be working with two different
-directory structures. The first is your local directory structure /home/userID.
-The second is the HDFS directory structure /user/userID. We will compile code
-on the first (/home/userID) and then deploy jar files to the second (/user/userID).
+* Large language models
+* Code-generation tools
+* External web resources
 
-The input to the program must be stored on HDFS and the output from the program will be written to HDFS. So, we will be copying input from our local system to HDFS before running a jar. We will be copying the output from HDFS
-to our local directory with the hadoop getMerge utility.
+Failure to comply with these restrictions may be treated as an academic integrity violation.
 
-The code and example data for the MaxTemperature application is from
-"Hadoop: The Definitive Guide, Second Edition, by Tom White.
-Copyright 2011 Tom White, 978-1-449-38973-4."
+---
 
-We will be running Linux, Centos 7.7, on a Hadoop cluster of several
-virtual machines at Heinz College.
+# Software Environment
 
-To reach the hadoop cluster, you will need to ssh into
-jumbo2.heinz.cmu.local.
+Part 1 uses the Hadoop Docker environment introduced in Lab 9.
 
-If you are working from home, first run the Cisco AnyConnect
-Secure Mobility Client. This tool may be downloaded from here:
+The Docker container provides:
 
-[Cisco Any Connect](https://www.cmu.edu/computing/services/endpoint/network-access/vpn/how-to/)
+* Hadoop 3.5.0
+* HDFS
+* YARN
+* MapReduce
+* Job History Server
 
-Enter vpn.cmu.edu in Cisco Any Connect. You should then be able to connect to
-the cluster with SSH.
+Although all Hadoop services execute inside a single Docker container, the same Hadoop services found in larger production clusters are present.
 
-```
-ssh -l YOUR_USER_ID jumbo2.heinz.cmu.local
+Before beginning this project, review Lab 9 and verify that you can:
 
-```
+* Start the Hadoop container.
+* Open a shell inside the container.
+* Copy files into HDFS.
+* Execute a MapReduce job.
+---
 
-If the above command fails, try the following:
+# Filesystems Used in This Project
 
-```
-ssh -oHostKeyAlgorithms=+ssh-rsa YOUR_USER_ID@jumbo2.heinz.cmu.local
+Three different filesystems are involved.
 
-```
+Understanding the differences between these filesystems is essential for working with Hadoop.
 
-There are Linux text editors available (pico, nano, and vi).
-You should spend a little time learning your text editor of choice. There
-is plenty of help online.
+MapReduce jobs execute within Hadoop and use HDFS for input and output. Source code is stored in your project workspace. Instructor-provided datasets are available in a separate read-only location.
 
-To use nano, use these commands:
+---
 
-```
-nano filename.java        starts the editor
-<control> o               to save a file
-<control> x               to exit nano.
+## Host Filesystem
 
+The host filesystem is the storage on your computer outside of Docker.
+
+The project repository is stored here.
+
+Example:
+
+```text
+workspace/
 ```
 
-On the cluster, your home directory is /home/userID.
+Inside the Docker container, this directory appears as:
 
-The hadoop jars and binaries are store at /usr/local/hadoop/share/hadoop/mapreduce and /usr/local/hadoop/share/hadoop/common/.
-
-Your HDFS file system directories are at /user/userID/output.
-
-Note that one is "usr" and the other is "user".
-
-It is assumed that students with Windows machines will be running putty or
-some other telnet tool to connect to the cluster. Mac users will likely
-use ssh.
-
-It is also assumed that each student has a user-ID and password for the Heinz cluster.
-
-You should have established a new password when you completed the
-Hadoop lab. Your user-ID should be on the grade book on Canvas. You should
-communicate your password to the TA's by taking the quiz which asks for your
-password. Also, note that your user ID and password need to be placed on the submission pdf.
-
-If you need to transfer data from your machine to the cluster, be sure to use
-sftp. The "copy and paste" approach will likely introduce hidden characters in your file. Here is an example execution of sftp.
-
-```
-sftp userID@jumbo2.heinz.cmu.local
-sftp>put MaxTemperature.java
-sftp>get MaxTemperature.java
+```text
+/home/student/Project5
 ```
 
-Here are some basic examples that you will need to study before attempting to work on the cluster.
-They are meant for reference. When working on the tasks below, you will need to use the commands
-here (but with appropriate modifications based on the task.) These commands will not run unless
-they are executed in the appropriate order and with appropriate resources. Spend some time
-studying them and then begin to use those that you need to complete the tasks.
+Files stored in the host filesystem remain available even if the Docker container is stopped, removed, or recreated.
 
-The overall idea is to compile your code, package it into a Java archive (JAR), and deploy the JAR for execution on the cluster. Below, we demonstrate how to perform these steps and also outline some basic Linux commands that you may need.
+You will edit your Java source code within this directory using your preferred editor or IDE.
 
-**Note: Use the up arrow in unix to select previously executed commands.**
+---
 
-The user wants to sort an employee file on the second column of a file and that column is numeric. We want high values near the top. The switch "2nr" means second column, numeric, reverse order. This is standard Linux and may be used when you are asked to sort a file.
+## Container Linux Filesystem
 
-```
-sort -k 2nr employee.txt
+The container filesystem exists inside the running Docker container.
 
-```
-The user wants to copy an existing directory and all of its content to a new directory. The destination directory is created with this command. The "R" is for recursive. This is standard Linux.
+Examples:
 
-```
-cp -R source_dir destination_dir
-
+```text
+/home/student
+/home/public
 ```
 
-The user would like to see a list of files on the Hadoop distributed file system under /user/userID/input.
+The directory:
 
-Note again the use of "user" and not "usr". "user" is a reference to the directory in HDFS. "usr" is a reference
-to your local directory. You might use this command to view the input to a map reduce job that you plan to run.
-
-```
-hdfs dfs -ls /user/userID/input/
-
+```text
+/home/public
 ```
 
-Suppose an input file needs to be placed under HDFS. This file will be used for subsequent map reduce processing.
-With this command, the HDFS file and directory are created. If they already exist on HDFS, then this command will return an 'already exists' message.
+contains instructor-provided datasets and example programs.
 
-```
-hdfs dfs -copyFromLocal /home/userID/input/1902.txt /user/userID/input/1902.txt
+Example files include:
 
-```
-
-Look at the contents of a file on HDFS.
-
-```
-hdfs dfs -cat /user/userID/input/testFile
-
+```text
+words.txt
+combinedYears.txt
+P1V.txt
+CrimeLatLonXYTabs.txt
+WordCount.java
 ```
 
-Remove a local directory of Java classes that may contain Java packages. Typically, the code in temperature_classes is already compiled and exists
-in a directory that corresponds to Java package names. This is standard Linux.
+You may read these files but should not modify them.
 
-```
-rm -r temperature_classes
+Files created elsewhere in the container filesystem may be lost if the container is removed and recreated.
+
+---
+
+## HDFS
+
+HDFS (Hadoop Distributed File System) is the filesystem used by Hadoop.
+
+Examples:
+
+```text
+/user/student/input
+/user/student/output
 ```
 
-Create a directory for Java classes. This is standard Linux.
+MapReduce jobs read their input from HDFS and write their output to HDFS.
 
+A typical workflow is:
+
+1. Copy an input file from `/home/public` or `/home/student/Project5` into HDFS.
+2. Execute a MapReduce job.
+3. Examine the output written to HDFS.
+4. Copy or merge the output back into your project directory.
+
+For example:
+
+```bash
+hdfs dfs -copyFromLocal /home/public/words.txt /user/student/input/words.txt
 ```
-mkdir temperature_classes
+
+After a job has completed:
+
+```bash
+hdfs dfs -getmerge /user/student/output TaskOutput
 
 ```
 
-Compile three Java classes using a library of Hadoop classes stored in
-a jar. The classes directory (./temperature_classes) is the
-target of the compile and may be populated with a directory structure
-that corresponds to Java packages. The classes directory (./temperature_classes) is also consulted during the compile. The Java files are in the current directory. The directory temperature_classes must already exist as a subdirectory of the current directory. This is all standard Linux.
+---
 
-These commands assume that you are in a directory just above temperature_classes.
-So, before running the first compile, if we execute an 'ls' command, we would see:
+## Summary
 
-```
-ls
-temperature_classes MaxTemperatureMapper.java MaxTemperatureReducer.java MaxTemperature.java
+Throughout this project you will routinely move files among these three locations:
 
-```
-Here we compile our Java source code (MaxTemperatureMapper.java, MaxTemperatureReducer.java, and MaxTemperature.java). We place the compiled code into the directory named temperature_classes. This directory must exist before running this compile step. The temperature_classes directory will be populated with a directory structure corresponding to our java package.  
+| Location | Purpose |
+|-----------|----------|
+| `/home/student/Project5` | Source code, project files, and final outputs |
+| `/home/public` | Instructor-provided datasets and code|
+| `/user/student/*` | HDFS input and output for MapReduce jobs |
 
-The necessary jar files are already in our class path and we include the $CLASSPATH in the compile.
+Understanding which filesystem a file resides in is one of the most important skills you will develop while working with Hadoop.
 
+---
 
-```
-javac -d temperature_classes -cp temperature_classes:$CLASSPATH MaxTemperatureMapper.java
-
-javac -d temperature_classes -cp temperature_classes:$CLASSPATH MaxTemperatureReducer.java
-
-javac -d temperature_classes -cp temperature_classes:$CLASSPATH MaxTemperature.java
+# Starting the Environment
 
 
-```
-To compile a single file and place the resulting classes into a directory, make the directory and execute the following command:
+After completing Lab 9, start the Hadoop environment:
 
-```
-javac -d wordcount_classes WordCount.java
-
-```
-To examine the classpath variable in linux:
-
-```
-echo $HADOOP_CLASSPATH
-echo $CLASSPATH
-
+```bash
+docker compose up -d --wait
 ```
 
-Remove an existing jar file using standard Linux.
+Verify that the container is healthy:
 
-```
-rm temperature.jar
-```
-
-Create a new jar file called temperature.jar. It will include all of the classes found in temperature_classes. Note the "." at the end of the line. The dot is important here. It refers
-to the current directory. Note too that temperature_classes must be a subdirectory of the current directory. This is standard Linux.
-
-In the jar (Java Archive) command, the "c" switch means to create a new archive. The "v" switch means to produce verbose output. The "f" switch means that the file name is being provided. In this case, it is "temperature.jar".
-
-Again, note the dot at the end of the line.
-
-```
-jar -cvf temperature.jar -C  temperature_classes/  .
-
+```bash
+docker compose ps
 ```
 
-Remove the output directory from the distributed file system. We need to do this prior to running
-a new job.
+Enter the Hadoop container:
 
-```
-hdfs dfs -rm -r /user/userID/output
-
+```bash
+docker compose exec hadoop bash
 ```
 
-Merge and copy files from the Hadoop Distributed File system to the client.
+Verify that Hadoop services are running:
 
+```bash
+lab-status
 ```
-hdfs dfs -getmerge /user/userID/output aCoolLocalFile
 
+The shell should open in:
+
+```text
+/home/student/Project5
 ```
 
-You may view what jobs are running on the cluster with the command:
+This directory corresponds to the `workspace` directory on your computer.
+
+---
+
+# Useful Web Interfaces
+
+The Hadoop services provide several web interfaces that can be viewed from a browser running on your computer.
+
+## HDFS NameNode
+
+```text
+http://localhost:9870
 ```
+
+The NameNode interface allows you to:
+
+* Browse HDFS directories
+* View file locations
+* View HDFS capacity information
+* Monitor HDFS health
+
+---
+
+## YARN ResourceManager
+
+```text
+http://localhost:8088
+```
+
+The ResourceManager interface allows you to:
+
+* View running jobs
+* View completed jobs
+* Monitor resource consumption
+* Examine MapReduce application status
+
+---
+
+## MapReduce Job History
+
+```text
+http://localhost:19888
+```
+
+The Job History interface allows you to:
+
+* Review completed MapReduce jobs
+* View mapper and reducer execution details
+* Examine task logs
+* Troubleshoot failed jobs
+
+Students are encouraged to use these interfaces while developing and debugging their MapReduce applications.
+
+---
+
+# Useful Commands
+
+The following commands will be helpful throughout the project.
+
+## Display Files on HDFS
+
+```bash
+hdfs dfs -ls /user/student/input
+```
+
+---
+
+## Copy a Local File into HDFS
+
+```bash
+hdfs dfs -copyFromLocal localFile.txt /user/student/input/localFile.txt
+```
+
+Use the `-f` option to overwrite an existing file:
+
+```bash
+hdfs dfs -copyFromLocal -f localFile.txt /user/student/input/localFile.txt
+```
+
+---
+
+## Display a File Stored on HDFS
+
+```bash
+hdfs dfs -cat /user/student/input/localFile.txt
+```
+
+---
+
+## Delete an HDFS Directory
+
+```bash
+hdfs dfs -rm -r -f /user/student/output
+```
+
+MapReduce jobs will fail if the output directory already exists.
+
+---
+
+## Merge Reducer Output into a Single Local File
+
+```bash
+hdfs dfs -getmerge /user/student/output mergedOutput.txt
+```
+
+---
+
+## List Running MapReduce Jobs
+
+```bash
 mapred job -list
-
-
 ```
 
-Kill a job that is not making progress (you may need to do this):
+---
+
+## List YARN Applications
+
+```bash
+yarn application -list -appStates ALL
 ```
 
-mapred job -kill job_1727103369351_0002
+---
 
+## Kill a Running Job
 
-```
-To kill a job, you will need the Job ID. The Job ID may be found by running mapred job -list.
-
-The "hadoop jar" command allows us to execute a map reduce job on the cluster. The file temperature.jar holds the map reduce code. Next,
-a path to the class with a main routine is provided. Then, the input and output is specified. The input is a file
-that must exist on the distributed file system and the output is a directory that will be created. It must
-not exist before running the command or you will receive an exception.
-
-```
-hadoop jar /home/userID/temperature.jar edu.cmu.andrew.mm6.MaxTemperature  /user/userID/input/combinedYears.txt /user/userID/output
-
+```bash
+mapred job -kill JOB_ID
 ```
 
-We wish to get a copy of the content of the output directory. The second command is standard Linux.
+Replace `JOB_ID` with the identifier displayed by:
+
+```bash
+mapred job -list
 ```
 
-hdfs dfs -getmerge /user/userID/output coolProjectOutput
+---
 
-cat coolProjectOutput
+# Programming Model
 
+All MapReduce applications in this project will use the Hadoop 3.x MapReduce API.
+
+Your programs should use classes from packages such as:
+
+```java
+org.apache.hadoop.mapreduce
 ```
 
-Note that the code below is defined within Java packages. So, when you compile
-the source code the compiled (.class files) will be placed within directories
-and sub directories.
+and
 
-:checkered_flag:**The proper submission of Project 5 is worth points on your Project 5 grade. In order to submit properly, your directory structure must be as described here:**
-
-Make a directory in your home directory called Project5.
-
-```
-cd
-mkdir Project5
-
+```java
+org.apache.hadoop.mapreduce.lib.*
 ```
 
-Within the Project5 directory, make an additional subdirectory with the
-name Part_1. Within the Part_1 directory make the following subdirectories: Task0,
-Task1, Task2 and so on, all the way through Task7. Place all Task0 work within the
-Task0 directory. Place all Task1 work within the Task1 directory and so on, all the way through Task7.
+The starter program provided in Task 0 demonstrates the programming style expected throughout Part 1.
 
-For Task0,
+The older Hadoop API based on:
 
-```
-cd Project5
-mkdir Part_1
-cd Part_1
-mkdir Task0
-cd Task0
-
+```java
+org.apache.hadoop.mapred
 ```
 
-:checkered_flag:**This is the beginning of the actual assignment.**
+should not be used in this project.
 
-## Part 1 Map Reduce Programming
+All MapReduce applications developed for this project should follow the same general pattern:
 
-### Task 0   
+1. Define a Mapper class.
+2. Define a Reducer class.
+3. Configure a Job object.
+4. Specify HDFS input and output paths.
+5. Execute the job through Hadoop.
+6. Merge the results back to your local system
 
-Compile and execute a MapReduce job developed from WordCount.java. The file
-WordCount.java is found under /home/public/. The code is also available at
-the bottom of this document. Copy it to your Project5/Part_1/Task0 directory. Compile it and
-generate a jar file called wordcount.jar. Deploy the jar file and test it
-against /home/public/words.txt. The file words.txt will need to be copied
-to HDFS using Hadoop's copyFromLocal command.
+Task 0 serves as the reference implementation for the remaining MapReduce tasks.
 
-Note, you may view the output with an hdfs dfs -cat command:
+---
+# Directory Structure
 
-```
-hdfs dfs -cat /user/userID/output/part-r-00000
+The project repository already contains the directory structure used for Part 1.
 
-```
-
-The final output should be merged and left in
-your /home/userID/Project5/Part_1/Task0/Task0Output file.
-
-The grader will be looking for this merged result file.
-
-You may use a large language model or the web to help with this problem. However, ensure you understand the code you submit, as your comprehension will be crucial for performing well on the next exam. Additionally, be sure to cite any external sources in your code. If you use an LLM tool to generate the code, make sure to cite the tool.
-
-### Task 1  
-
-Working from WordCount.java, build and deploy a MapReduce application
-named LetterCounter.java and place it into a jar file called lettercount.jar.
-This program will compute the total number of each letter in the words.txt file. The output from the reducer will need to be merged and then sorted (use the standard Linux sort command). The most
-frequently occurring letter and its count will appear at the top of the file - sorted by decreasing frequency. The letter "e" is the most common letter and will appear at the top of the file.
-
-The result will be left in your /home/userID/Project5/Part_1/Task1/Task1Output file. The grader will be looking for this merged result file.
-
-Note that
-WordCount.java (Task 0) uses a call to nextToken() on the iterator. Without this call,
-the program will enter an infinite loop and will need to be killed.
-
-You may use a large language model or the web to help with this problem. However, ensure you understand the code you submit, as your comprehension will be crucial for performing well on the next exam. Additionally, be sure to cite any external sources in your code. If you use an LLM tool to generate the code, make sure to cite the tool.
-
-### Task 2  
-
-Create a Java program named "FindPattern.java". It will be a modification of the WordCount.java code. FindPattern.java searches through words.txt and outputs any word that contains the string "fun". This is not a case sensitive search.
-The final output will be a single file containing a list of words that contain the string "fun". If the word "Fungia" appeared in the input, it too would be output. As was noted, the search is not case sensitive.
-
-All of these words will be listed in the following file:
-/home/userID/Project5/Part_1/Task2/Task2Output. The grader will be looking for this merged result file.
-
-Here is the start of the final output with a few words that contain "fun":
-
-```
-Infundibulata
-afunction
-antifundamentalist
-defunct
-
+```text
+workspace/
+└── Part_1/
+    ├── Task0/
+    ├── Task1/
+    ├── Task2/
+    ├── Task3/
+    ├── Task4/
+    ├── Task5/
+    ├── Task6/
+    └── Task7/
 ```
 
-You may use a large language model or the web to help with this problem. However, ensure you understand the code you submit, as your comprehension will be crucial for performing well on the next exam. Additionally, be sure to cite any external sources in your code. If you use an LLM tool to generate the code, make sure to cite the tool.
+Complete each task within its assigned directory.
 
-### Task 3
+Unless instructed otherwise, leave all task files in their original locations.
 
+Note that each task already has starter code with comments. Task0 only has
+a README.md file. We will copy WordCount.java into the Task0 directory.
 
-In this task, we will use a fairly large dataset from Tom White's book.
-The data file is located at "/home/public/combinedYears.txt". It contains thousands of temperature readings
-(in Celsius times 10) in the USA by year from 1901 to 1902. The year is specified
-in positions 15-18. The temperature is specified beginning at column 87 and begins
-with a plus or minus character. Four digits are used for the temperature. Be sure
-to study the code below to see how it references these locations.
+---
 
-Below are three files: MaxTemperature.java, MaxTemperatureMapper.java and MaxTemperatureReducer.java. These files may be found at /home/public. Copy these files to your
-/home/userID/Project5/Part_1/Task3 directory.
+# Submission
 
-Run this application against the data set under /home/public/combinedYears.txt. Your jar file will
-be named temperature.jar.  The output should be left in your
-/home/userID/Project5/Part_1/Task3/Task3Output file. The grader will be looking for this merged result file.
+Submit a single ZIP file named:
 
-You may use a large language model or the web to help with this problem. However, ensure you understand the code you submit, as your comprehension will be crucial for performing well on the next exam. Additionally, be sure to cite any external sources in your code. If you use an LLM tool to generate the code, make sure to cite the tool.
-
-### Task 4
-
-Modify the code from Task 3 and build a minimum temperature application. Note that the
-temperatures in this file are degrees Celsius * 10.  Your jar file will be named
-mintemperature.jar.  The output should be left in your
-/home/userID/Project5/Part_1/Task4/Task4Output
-file. The grader will be looking for this merged result file.
-
-You may use a large language model or the web to help with this problem. However, ensure you understand the code you submit, as your comprehension will be crucial for performing well on the next exam. Additionally, be sure to cite any external sources in your code. If you use an LLM tool to generate the code, make sure to cite the tool.
-
-
-### Task 5
-
-Within the /home/public directory, there is a file called P1V.txt.
-
-P1V.txt is a tab delimited text file with a individual criminal offense incidents
-from January 1990 through December 1999 for serious violent crimes (FBI Part 1) in Pittsburgh.
-
-The first two columns (X,Y) represent State Plane (projected, rectilinear) coordinates (measured
-in feet) specifying the location of the crime.
-The third column is the time.
-The fourth column is a street address.
-The fifth column is the type of offense (aggravated assault, Robbery, Rape, Etc.)
-The sixth column is the date.
-The seventh column is the 2000 census tract.
-
-Write a MapReduce application that finds the total number of aggravated assaults and
-robberies. If there were 100 aggravated assaults and 50 robberies then this program
-would generate the value 150 to an output file.
-
-Your jar file will be named aggrvatedassaultsplusrobberies.jar. The output should be left
-in your /home/userID/Project5/Part_1/Task5/Task5Output file. The grader will be looking for this merged result file.
-
-You may **not** use a large language model or any external source for this task.
-
-### Task 6
-
-Modify your solution to Task 5 so that it finds the total number of aggravated assault crimes that occurred within
-100 meters of 3803 Forbes Avenue in Oakland. This location has the (X,Y) coordinates of
-(1354326.897,411447.7828). Use these coordinates and the Pythagorean theorem to decide if a particular
-aggravated assault occurred within 100 meters of 3803 Forbes Avenue. State plane coordinates are measured in feet.
-Your code is testing on meters.
-
-Your jar file will be named oaklandcrimestats.jar. The output should be left
-in your /home/userID/Project5/Part_1/Task6/Task6Output file. The grader will be looking for this merged result file.
-
-You may **not** use a large language model or any external source for this task.
-
-### Task 7
-
-
-In Task 7, the input file is named CrimeLatLonXYTabs.txt. It can be copied from the /home/public directory.
-Its format is similar to P1V.txt but also includes the latitude and longitude of each crime.
-
-CrimeLatLonXYTabs.txt is a tab delimited text file with a individual criminal offense incidents
-from January 1990 through December 1999 for serious violent crimes (FBI Part 1) in Pittsburgh.
-
-The first two columns (X,Y) represent State Plane (projected, rectilinear) coordinates (measured
-in feet) specifying the location of the crime.
-The third column is the time.
-The fourth column is a street address.
-The fifth column is the type of offense (aggravated assault, rape, Etc.)
-The sixth column is the date.
-The seventh column is the 2000 census tract.
-The eight column specifies the latitude.
-The ninth column specifies the longitude.
-
-These last two columns are used for viewing in GIS tools (such as Google Earth Pro).
-
-Modify your solution to Task 5 so that it finds all of the aggravated assault
-crimes that occurred within 100 meters of 3803 Forbes Avenue in Oakland. This location has
-the (X,Y) coordinates of (1354326.897,411447.7828). Use these coordinates and the Pythagorean
-theorem to decide if a particular aggravated assault occurred within 100 meters of 3803 Forbes
-Avenue. State plane coordinates are measured in feet. Your code is testing on meters.
-
-Your jar file will be named oaklandcrimestatskml.jar. The output file will be a well formed KML file
-suitable for viewing in Google Earth. The KML file will be used to display each of these crimes on
-a map. The output file will be left in your /home/userID/Project5/Part_1/Task7/Task7Output file. The grader will be looking for this merged result file.
-
-Here is a simple KML file from Google. You can save it and then load it into Google Earth. Your solution will be a longer file.
-
-```
-<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2">
-  <Placemark>
-    <name>Simple placemark</name>
-    <description>Attached to the ground. Intelligently places itself
-       at the height of the underlying terrain.</description>
-    <Point>
-      <coordinates>-122.0822035425683,37.42228990140251,0</coordinates>
-    </Point>
-  </Placemark>
-</kml>
+```text
+Project5.zip
 ```
 
-You will also need to provide a screenshot showing Google Earth viewing the KML. Include the screenshot on your pdf that is submitted to Canvas.
+The ZIP file should contain all source code developed for Part 1 and Part 2.
 
-You should consider limiting the number of reducers to 1. You can do this by
-generating the same key from each mapper.
+Submit Java source code only.
 
-You may **not** use a large language model or any external source for this task.
+Do not submit:
 
-### Part 1 Summary
+* Compiled class files (`.class`)
+* JAR files
+* IDE configuration files
+* Hadoop output directories
+* Temporary files
+* Build artifacts
 
-Part 1 will be graded by carefully inspecting tasks on the cluster.
+For Task 7, additionally submit:
 
-### WordCount.java
-
-```
-package org.myorg;
-
-import java.io.IOException;
-import java.util.StringTokenizer;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.conf.Configured;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
-import org.apache.hadoop.util.Tool;
-import org.apache.hadoop.util.ToolRunner;
-
-public class WordCount extends Configured implements Tool {
-
-    public static class MapClass extends Mapper<LongWritable, Text, Text, IntWritable> {
-        private final static IntWritable one = new IntWritable(1);
-        private Text word = new Text();
-
-        public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-            String line = value.toString();
-            StringTokenizer tokenizer = new StringTokenizer(line);
-            while (tokenizer.hasMoreTokens()) {
-                word.set(tokenizer.nextToken());
-                context.write(word, one);
-            }
-        }
-    }
-
-    public static class ReduceClass extends Reducer<Text, IntWritable, Text, IntWritable> {
-        public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
-            int sum = 0;
-            for (IntWritable val : values) {
-                sum += val.get();
-            }
-            context.write(key, new IntWritable(sum));
-        }
-    }
-
-    public int run(String[] args) throws Exception {
-        Configuration conf = getConf();
-        Job job = Job.getInstance(conf, "wordcount");
-        job.setJarByClass(WordCount.class);
-
-        job.setMapperClass(MapClass.class);
-        job.setReducerClass(ReduceClass.class);
-
-        job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(IntWritable.class);
-
-        job.setInputFormatClass(TextInputFormat.class);
-        job.setOutputFormatClass(TextOutputFormat.class);
-
-        FileInputFormat.addInputPath(job, new Path(args[0]));
-        FileOutputFormat.setOutputPath(job, new Path(args[1]));
-
-        return job.waitForCompletion(true) ? 0 : 1;
-    }
-
-    public static void main(String[] args) throws Exception {
-        int res = ToolRunner.run(new Configuration(), new WordCount(), args);
-        System.exit(res);
-    }
-}
-
-```
-### MaxTemperatureMapper.java
-
+```text
+GoogleEarthScreenshot.png
 ```
 
-// ============== MaxTemperatureMapper.java ================================
-  package edu.cmu.andrew.mm6;
-  import java.io.IOException;
-	import org.apache.hadoop.io.IntWritable;
-	import org.apache.hadoop.io.LongWritable;
-	import org.apache.hadoop.io.Text;
-	import org.apache.hadoop.mapred.MapReduceBase;
-	import org.apache.hadoop.mapred.Mapper;
-	import org.apache.hadoop.mapred.OutputCollector;
-	import org.apache.hadoop.mapred.Reporter;
+Detailed submission instructions will be provided on Canvas.
 
-	public class MaxTemperatureMapper extends MapReduceBase implements Mapper<LongWritable, Text, Text, IntWritable> {
-		private static final int MISSING = 9999;
-		public void map(LongWritable key, Text value, OutputCollector<Text, IntWritable> output, Reporter reporter) throws 			IOException {
+---
 
-                        // Get line from input file. This was passed in by Hadoop as value.
-                        // We have no use for the key (file offset) so we are ignoring it.
+# Future Automated Grading
 
-			String line = value.toString();
+To support automated grading, follow the required directory structure exactly.
 
-                        // Get year when weather data was collected. The year is in positions 15-18.
-                        // This field is at a fixed position within a line.
-			String year = line.substring(15, 19);
+Do not rename:
 
-                        // Get the temperature too.
+* Task directories
+* Required Java source files
+* Required package names
 
-			int airTemperature;
-			if (line.charAt(87) == '+') { // parseInt doesn't like leading plus signs
-				airTemperature = Integer.parseInt(line.substring(88, 92));
-			} else {
-				airTemperature = Integer.parseInt(line.substring(87, 92));
-                        }
+The grading system will compile and test submitted Java source code.
 
-                        // Get quality of reading. If not missing and of good quality then
-                        // produce intermediate (year,temp).
+Some tasks may be evaluated using hidden datasets in addition to the datasets provided in this project.
 
-                        String quality = line.substring(92, 93);
-			if (airTemperature != MISSING && quality.matches("[01459]")) {
+Programs must compile and execute successfully without modification.
 
-                             // for each year in input, reduce will be called with
-                             // (year,[temp,temp,temp, ...])
-                             // They key is year and the list of temps will be placed in an iterator.
+---
 
-				output.collect(new Text(year), new IntWritable(airTemperature)); }
-			}
-	 }
-```
-### MaxTemperatureReducer.java
+# Grading
 
-```
+Your submission will be evaluated based on:
 
-=========== MaxTemperatureReducer.java ====================================================
-	package edu.cmu.andrew.mm6;
-  import java.io.IOException;
-  import java.util.Iterator;
-	import org.apache.hadoop.io.IntWritable;
-	import org.apache.hadoop.io.Text;
-	import org.apache.hadoop.mapred.MapReduceBase;
-	import org.apache.hadoop.mapred.OutputCollector;
-	import org.apache.hadoop.mapred.Reducer; import org.apache.hadoop.mapred.Reporter;
+* Correctness
+* Documentation
+* Code quality
+* Successful compilation
+* Successful execution
 
-	public class MaxTemperatureReducer extends MapReduceBase implements Reducer<Text, IntWritable, Text, IntWritable> {
+Programs that do not compile will receive little or no credit.
 
-		public void reduce(Text key, Iterator<IntWritable> values, OutputCollector<Text,
-                                   IntWritable> output, Reporter reporter) throws IOException {
+---
 
-                        // from the list of values, find the maximum
-                        int maxValue = Integer.MIN_VALUE;
-                        while (values.hasNext()) {
-			     maxValue = Math.max(maxValue, values.next().get());
-                        }
-                        // emit (key = year, value = maxTemp = max for year)
-			output.collect(key, new IntWritable(maxValue));
-		}
-	}
+# PART 1 - MAPREDUCE PROGRAMMING
 
-```
-### MaxTemperature.java
+## General Notes
 
-```
-// ======= And, to get it all running and tied together: MaxTemperature.java ============
+Unless otherwise specified, all MapReduce jobs will follow the same workflow.
 
-  package edu.cmu.andrew.mm6;
-	import org.apache.hadoop.fs.Path;
-	import org.apache.hadoop.io.IntWritable;
-	import org.apache.hadoop.io.Text;
-	import org.apache.hadoop.mapred.FileInputFormat;
-	import org.apache.hadoop.mapred.FileOutputFormat; import org.apache.hadoop.mapred.JobClient;
-	import org.apache.hadoop.mapred.JobConf;
+### Step 1
 
-	public class MaxTemperature {
-		public static void main(String[] args) throws IOException {
-			if (args.length != 2) {
-				System.err.println("Usage: MaxTemperature <input path> <output path>");
-				System.exit(-1);
- 			}
-			JobConf conf = new JobConf(MaxTemperature.class);
-			conf.setJobName("Max temperature");
-			FileInputFormat.addInputPath(conf, new Path(args[0]));
-			FileOutputFormat.setOutputPath(conf, new Path(args[1]));
-			conf.setMapperClass(MaxTemperatureMapper.class);
-			conf.setReducerClass(MaxTemperatureReducer.class);
-			conf.setOutputKeyClass(Text.class);
-			conf.setOutputValueClass(IntWritable.class);
-			JobClient.runJob(conf);
-		 }
-	}
+Copy input data into HDFS.
 
+Example:
+
+```bash
+hdfs dfs -mkdir -p /user/student/input
+
+hdfs dfs -copyFromLocal /home/public/words.txt /user/student/input/words.txt
 ```
 
-## Part 2 Spark Programming
+### Step 2
 
-You may use a large language model or the web to help with Part 2. However, ensure you understand the code you submit, as your comprehension will be crucial for performing well on the next exam. Additionally, be sure to cite any external sources in your code. If you use an LLM tool to generate the code, make sure to cite the tool.
+Remove any previous output directory.
 
-In this part, we will be running Spark within IntelliJ. This is similar to what
-we did in [Lab 9](https://github.com/CMU-Heinz-95702/lab9-MapReduceAndSpark). Note that in this part, we need to use JDK 8 rather than
-JDK 17. There is a known issue with using Spark and JDK 17.
-
-When you first run IntelliJ, be sure to select a JDK 8 compiler (JDK 1.8 is the same thing).
-
-Begin by working with the following input file named "ShortTextFile". Note that "ABCD" is not the same as "abcd".
-
-```
-ABCD
-EFGH
-IJK LMN OP;/
-QRST U
-V WXYZ
-WXYZ
-abcd
-
-cool beans
+```bash
+hdfs dfs -rm -r -f /user/student/output
 ```
 
-Write a Spark program that generates the following counts:
+Hadoop will fail if the output directory already exists.
 
-```
-Number of lines: 9
-Number of words: 13
-Number of distinct words: 12
-Number of symbols: 51
-Number of distinct symbols: 39
-Number of distinct letters: 35
-```
+### Step 3
 
-If your Spark program computes these same values on this small dataset, it will work well for the larger
-one.
+Compile and execute the MapReduce program.
 
-Note, the number of symbols is 51. In Java, the split("") method does not include trailing newline characters at the end of a string. So, if a line ends with a newline character, it won’t be included in the resulting array. However, if there is a newline character on a line by itself (i.e., an empty line), it will be included as a separate element in the array.
+During development, you are encouraged to compile and test your work frequently.
 
+### Step 4
 
-We will be using a data file found on the course schedule. This data file is "All's Well That Ends Well" by William Shakespeare. The file is found at the following link:
+Merge reducer output into a local file.
 
-[All's Well That Ends Well](http://www.andrew.cmu.edu/course/95-702/homework/data/SparkDataFiles/AllsWellThatEndsWell.txt)
-
-You need to download "All's Well That Ends Well" to your local machine and set both your working directory and the file name in IntelliJ. See [Lab 9](https://github.com/CMU-Heinz-95702/lab9-MapReduceAndSpark) for detailed directions on setting up IntelliJ to run a Spark application with an input file.
-
-
-
-### Part 2 Summary
-
-Write a Java program that uses Spark to read "All's Well That Ends Well" and perform various calculations. The name of the program is ShakespeareAnalytics.java.
-
-Simply add each task below to the code in the file ShakespeareAnalytics.java. This one file will contain all of the functionality listed here as separate tasks.
-
-Include your labelled and well-formatted code in the pdf submission. Include an output interaction as well. The output will be a copy and paste of the IntelliJ output window. At the bottom, the interaction will show the results of searching for the string "love" in "All's Well That Ends Well". The string "love" appears, for example, in the word "cloven". The string "love" does not appear in the string "Love". Our search is case-sensitive. See Task 6.
-
-The copy and paste of the output must include all of the "Info" lines that are generated by IntelliJ. Your program output will be interspersed in this output.
-
-For debugging and development, it is a good idea (but not required) to pepper your development code with lines that write RDD's to a file. It is fine if you leave such code in your final submission. The following is an example from my solution:
-
-```
- pairData.saveAsTextFile("002_WordsPairedWith1");
-
+```bash
+hdfs dfs -getmerge /user/student/output TaskOutput
 ```
 
-### Documentation
+### Step 5
 
-ShakespeareAnalytics.java needs to be well documented. It must begin with the author's name and an overall description. Each line of code needs to be described in your own words.
+Inspect the results.
 
-### Task 0.
-
-Using the count method of the JavaRDD class, display the number of lines in "All's Well That Ends Well".
-
-Write this output to the screen with System.out.println(). This output will be included in your pdf.
-
-### Task 1.
-
-Using the split method of the java String class and the flatMap method of the JavaRDD class,
-use the count method of the JavaRDD class to display the number of words in "All's Well That Ends Well". So that we are all on the same page, be sure to use
-the string "[^a-zA-Z]+" as the regular expression delimiter in your split method.
-
-In Task 1 and Task 2, you might also make good use of a filter function:
-
-```
-Function<String, Boolean> filter = k -> ( !k.isEmpty());
-
+```bash
+cat TaskOutput
 ```
 
-Write this output to the screen with System.out.println(). This output will be included in your pdf.
+---
 
+## Reducer Output Files
 
-### Task 2.
+A MapReduce job may generate one or more reducer output files:
 
-Using some of the work you did above and the JavaRDD distinct() and count() methods, display
-the number of distinct words in "All's Well That Ends Well".
-
-Write this output to the screen with System.out.println(). This output will be included in your pdf.
-
-### Task 3.
-
-Use the split method with a regular expression of "" and a flatmap to find the number of symbols in "All's Well That Ends Well".
-
-Write this output to the screen with System.out.println(). This output will be included in your pdf.
-
-### Task 4.
-
-Find the number of distinct symbols in "All's Well That Ends Well".
-
-Write this output to the screen with System.out.println(). This output will be included in your pdf.
-
-### Task 5.
-
-Find the number of distinct letters in "All's Well That Ends Well". Note that "e" is not the same letter as "E". In this task, we are case-sensitive.
-
-Write this output to the screen with System.out.println(). This output will be included in your pdf.
-
-### Task 6.
-
-This is an interactive piece. Ask your user to enter a word and show all of the lines of "All's Well That Ends Well" that contain that word. The search will be case-sensitive. If, for example, the user enters the word "love", she would see such lines as:
-
+```text
+part-r-00000
+part-r-00001
+part-r-00002
+...
 ```
-Attend his love.
-That I should love a bright particular star
-Th' ambition in my love thus plagues itself:
-:
-:
 
+When a task requires a single output file, use:
+
+```bash
+hdfs dfs -getmerge
 ```
-But she would see no lines with an uppercase "Love".
 
-Interact with the user and write this output to the screen with System.out.println(). This output will be included in your pdf.
+to merge reducer output into a single local file before examining the results.
 
-### Part 2 Summary
+---
 
-Part 2 will be graded by carefully inspecting the single program and the output (including INFO lines).
+# Task 0 - Word Count
+
+The file:
+
+```text
+/home/public/WordCount.java
+```
+
+contains a complete Hadoop 3.x MapReduce application.
+
+Copy this file into:
+
+```text
+workspace/Part_1/Task0
+```
+
+For example:
+
+```bash
+cp /home/public/WordCount.java Project5/Part_1/Task0
+```
+
+The WordCount.java program serves as the reference implementation for the remainder of Part 1.
+
+Study the program carefully and make sure that you understand:
+
+* The Mapper class
+* The Reducer class
+* The Job configuration
+* ToolRunner
+* HDFS input paths
+* HDFS output paths
+
+The package declaration is:
+
+```java
+package edu.cmu.project5.task0;
+```
+
+Future tasks will follow a similar package naming convention.
+
+---
+
+## Running the Program
+
+Create an HDFS input directory:
+
+```bash
+hdfs dfs -mkdir -p /user/student/input
+```
+
+Copy the input file to HDFS:
+
+```bash
+hdfs dfs -copyFromLocal /home/public/words.txt /user/student/input/words.txt
+```
+
+Remove any existing output directory:
+
+```bash
+hdfs dfs -rm -r -f /user/student/output
+```
+Copy CountWords.java into the Task0 directory.
+
+From within Task0 do:
+
+cp /home/public/WordCount.java WordCount.java
+
+
+Compile the application.
+
+javac -classpath "$(hadoop classpath)" -d . WordCount.java
+
+Create a jar (Java archive) file
+
+jar -cvf wordcount.jar edu
+
+We need input on HDFS:
+
+Make the input directory on our local system:
+
+mkdir -p /home/student/input
+
+Put some text in the input directory:
+
+printf "dog cat dog dog\n" > /home/student/input/test.txt
+
+Make a directory to hold the input on HDFS:
+
+hdfs dfs -mkdir -p /user/student/task0/input
+
+Copy our local input the HDFS:
+
+hdfs dfs -copyFromLocal -f /home/student/input/test.txt /user/student/task0/input
+
+Remove any old output from HDFS:
+
+hdfs dfs -rm -r -f /user/student/task0/output
+
+Deploy and execute the jar file to HDFS:
+
+hadoop jar wordcount.jar edu.cmu.project5.task0.WordCount /user/student/task0/input /user/student/task0/output
+
+
+After the job completes, examine the output stored on HDFS:
+
+```bash
+hdfs dfs -cat /user/student/output/part-r-00000
+```
+
+Merge the reducer output into a local file in a directory named output:
+
+mkdir -p output
+
+hdfs dfs -getmerge /user/student/task0/output output/result.txt
+
+cat output/result.txt
+---
+
+## Deliverables
+
+The grader will examine:
+
+* WordCount.java
+* Source code documentation
+* Successful program execution
+* Task0Output
+
+You may use a large language model or web resources for this task.
+
+Any external assistance must be documented within your source code comments.
+
+---
+
+## Task 1 Preview
+
+In Task 1, you will modify the WordCount design to build a MapReduce application that computes letter frequencies rather than word frequencies.
+
+The structure, programming model, package organization, and Hadoop workflow used in Task 0 should serve as the foundation for your Task 1 solution.
