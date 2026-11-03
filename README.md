@@ -639,14 +639,14 @@ cp /home/public/WordCount.java WordCount.java
 
 ```
 
-Compile the application.
+Compile the application:
 
 ```bash
 javac -classpath "$(hadoop classpath)" -d . WordCount.java
 
 ```
 
-Create a jar (Java archive) file
+Create a jar (Java archive) file:
 
 ```
 jar -cvf wordcount.jar edu
@@ -686,7 +686,7 @@ Remove any old output from HDFS:
 hdfs dfs -rm -r -f /user/student/task0/output
 ```
 
-Deploy and execute the jar.
+Deploy and execute the jar:
 
 ```bash
 hadoop jar wordcount.jar edu.cmu.project5.task0.WordCount /user/student/task0/input /user/student/task0/output
@@ -700,20 +700,20 @@ hdfs dfs -cat /user/student/output/part-r-00000
 ```
 
 Merge the reducer output into a local file in a directory named output.
-Firs, create output.
+First, create the output directory:
 
 ```
 mkdir -p output
 
 ```
 
-Merge the results back to our local system.
+Merge the results back to our local system:
 
 ```
 hdfs dfs -getmerge /user/student/task0/output output/result.txt
 
 ```
-View the results.
+View the results:
 
 ```
 cat output/result.txt
