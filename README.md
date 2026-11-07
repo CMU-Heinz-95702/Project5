@@ -501,47 +501,37 @@ Unless otherwise specified, all MapReduce jobs will follow the same workflow.
 
 ### Step 1
 
-Copy input data into HDFS.
-
-Example:
-
-```bash
-hdfs dfs -mkdir -p /user/student/input
-
-hdfs dfs -copyFromLocal /home/public/words.txt /user/student/input/words.txt
-```
+Make an HDFS directory to hold the input and
+copy the input to HDFS.
 
 ### Step 2
 
-Remove any previous output directory.
-
-```bash
-hdfs dfs -rm -r -f /user/student/output
-```
-
+Remove any previous output directory from HDFS.
 Hadoop will fail if the output directory already exists.
 
 ### Step 3
 
-Compile and execute the MapReduce program.
-
-During development, you are encouraged to compile and test your work frequently.
+Compile the MapReduce program.
 
 ### Step 4
 
-Merge reducer output into a local file.
+Place the compiled code in a Java archive (jar file).
+The jar file will typically contain a directory path
+that matches the package name of the Java class.
 
-```bash
-hdfs dfs -getmerge /user/student/output TaskOutput
-```
 
 ### Step 5
 
-Inspect the results.
+Deploy and execute the jar file on HDFS.
 
-```bash
-cat TaskOutput
-```
+### Step 6
+
+Merge reducer output into a local file.
+
+
+### Step 7
+
+Inspect the results.
 
 ---
 
@@ -602,6 +592,9 @@ The package declaration is:
 package edu.cmu.project5.task0;
 ```
 
+After compilation, you will see the edu directory, corresponding
+to the start of the package path.
+
 Future tasks will follow a similar package naming convention.
 
 ---
@@ -613,8 +606,13 @@ Create an HDFS input directory:
 ```bash
 hdfs dfs -mkdir -p /user/student/input
 ```
+Old files may be removed from HDFS with the following command:
 
-Copy the input file to HDFS:
+```bash
+hdfs dfs -rm  /user/student/input/*
+```
+
+Copy an input file to HDFS:
 
 ```bash
 hdfs dfs -copyFromLocal /home/public/words.txt /user/student/input/words.txt
@@ -627,7 +625,6 @@ hdfs dfs -rm -r -f /user/student/output
 ```
 Copy WordCount.java into the Task0 directory.
 
-From within Task0 do:
 
 ```bash
 cp /home/public/WordCount.java WordCount.java
@@ -636,18 +633,24 @@ cp /home/public/WordCount.java WordCount.java
 
 Compile the application with the following command.
 Note, the -d . option causes the compiler to create the
-package directory hierarchy automatically.
+package directory hierarchy automatically. You should see
+edu as a new directory after the compile.
 
 ```bash
 javac -classpath "$(hadoop classpath)" -d . WordCount.java
 
 ```
 
-Create a jar (Java archive) file:
+From within Task0, create a jar (Java archive) file:
 
 ```
 jar -cvf wordcount.jar edu
 
+```
+You should now see the following in Task0:
+```
+ls
+edu  README.md	wordcount.jar  WordCount.java
 ```
 
 We need input placed on HDFS.
@@ -680,13 +683,13 @@ hdfs dfs -copyFromLocal -f /home/student/input/test.txt /user/student/task0/inpu
 Remove any old output from HDFS:
 
 ```
-hdfs dfs -rm -r -f /user/student/task0/output
+hdfs dfs -rm -r -f /user/student/output
 ```
 
 Deploy and execute the jar:
 
 ```bash
-hadoop jar wordcount.jar edu.cmu.project5.task0.WordCount /user/student/task0/input /user/student/task0/output
+hadoop jar wordcount.jar edu.cmu.project5.task0.WordCount /user/student/input /user/student/output
 ```
 
 
@@ -694,7 +697,7 @@ After the job completes, examine the output stored on HDFS:
 
 ```bash
 
-hdfs dfs -cat /user/student/task0/output/part-r-00000
+hdfs dfs -cat /user/student/output/part-r-00000
 
 ```
 
@@ -702,20 +705,20 @@ Merge the reducer output into a local file in a directory named output.
 First, create the output directory:
 
 ```
-mkdir -p output
+mkdir -p /home/student/output
 
 ```
 
 Merge the results back to our local system:
 
 ```
-hdfs dfs -getmerge /user/student/task0/output output/result.txt
+hdfs dfs -getmerge /user/student/output /home/student/output/result.txt
 
 ```
 View the results:
 
 ```
-cat output/result.txt
+cat /home/student/output/result.txt
 ```
 
 ---
@@ -724,10 +727,9 @@ cat output/result.txt
 
 The grader will examine:
 
-* WordCount.java
-* Source code documentation
+* Source code documentation in WordCount.java
 * Successful program execution
-* Task0Output
+* results.txt
 
 You may use a large language model or web resources for this task.
 
