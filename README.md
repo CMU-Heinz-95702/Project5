@@ -219,12 +219,6 @@ Enter the Hadoop container:
 docker compose exec hadoop bash
 ```
 
-Verify that Hadoop services are running:
-
-```bash
-lab-status
-```
-
 The shell should open in:
 
 ```text
@@ -232,6 +226,13 @@ The shell should open in:
 ```
 
 This directory corresponds to the `workspace` directory on your computer.
+
+From inside the container, verify that Hadoop services are running:
+
+```bash
+lab-status
+```
+
 
 ---
 
