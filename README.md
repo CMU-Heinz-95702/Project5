@@ -178,7 +178,7 @@ hdfs dfs -copyFromLocal /home/public/words.txt /user/student/input/words.txt
 After a job has completed:
 
 ```bash
-hdfs dfs -getmerge /user/student/output TaskOutput
+hdfs dfs -getmerge /user/student/output /home/student/Project5/Part_1/Task0/Task0Output
 
 ```
 
