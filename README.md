@@ -803,12 +803,13 @@ in positions 15-18. The temperature is specified beginning at column 87 and begi
 with a plus or minus character. Four digits are used for the temperature. Be sure
 to study the code below to see how it references these locations.
 
-Below are three files: MaxTemperature.java, MaxTemperatureMapper.java and MaxTemperatureReducer.java. These files may be found at /home/public. Copy these files to your
-/home/userID/Project5/Part_1/Task3 directory.
+Below are three files: MaxTemperature.java, MaxTemperatureMapper.java and MaxTemperatureReducer.java.
+These files may be found at /home/public. Copy these files to your
+/home/student/Project5/Part_1/Task3 directory.
 
 Run this application against the data set under /home/public/combinedYears.txt. Your jar file will
 be named temperature.jar.  The output should be left in your
-/home/userID/Project5/Part_1/Task3/Task3Output file. The grader will be looking for this merged result file.
+/home/student/Project5/Part_1/Task3/Task3Output file. The grader will be looking for this merged result file.
 
 You may use a large language model or the web to help with this problem.
 Be sure to site any external sources in your code.
@@ -818,7 +819,7 @@ Be sure to site any external sources in your code.
 Modify the code from Task 3 and build a minimum temperature application. Note that the
 temperatures in this file are degrees Celsius * 10.  Your jar file will be named
 mintemperature.jar.  The output should be left in your
-/home/userID/Project5/Part_1/Task4/Task4Output
+/home/student/Project5/Part_1/Task4/Task4Output
 file. The grader will be looking for this merged result file.
 
 You may use a large language model or the web to help with this problem.
@@ -844,9 +845,11 @@ robberies. If there were 100 aggravated assaults and 50 robberies then this prog
 would generate the value 150 to an output file.
 
 Your jar file will be named aggrvatedassaultsplusrobberies.jar. The output should be left
-in your /home/userID/Project5/Part_1/Task5/Task5Output file. The grader will be looking for this merged result file.
+in your /home/student/Project5/Part_1/Task5/Task5Output file. The grader will be looking
+for this merged result file.
 
-You may **not** use a large language model or any external source for this task.
+You may **not** use a large language model or any external source for this task. You
+may use code from Task 4.
 
 ### Task 6
 
@@ -857,9 +860,11 @@ aggravated assault occurred within 350 meters of 3803 Forbes Avenue. State plane
 Your code is testing on meters.
 
 Your jar file will be named oaklandcrimestats.jar. The output should be left
-in your /home/userID/Project5/Part_1/Task6/Task6Output file. The grader will be looking for this merged result file.
+in your /home/student/Project5/Part_1/Task6/Task6Output file. The grader will be looking
+for this merged result file.
 
-You may **not** use a large language model or any external source for this task.
+You may **not** use a large language model or any external source for this task. You
+may use code from Task 5.
 
 ### Task 7
 
@@ -890,10 +895,10 @@ Avenue. State plane coordinates are measured in feet. Your code is testing on me
 
 Your jar file will be named oaklandcrimestatskml.jar. The output file will be a well formed KML file
 suitable for viewing in Google Earth. The KML file will be used to display each of these crimes on
-a map. The output file will be left in your /home/userID/Project5/Part_1/Task7/Task7Output file. The grader will be looking for this merged result file.
+a map. The output file will be left in your /home/student/Project5/Part_1/Task7/Task7Output file. The grader will be looking for this merged result file.
 
 Here is a simple KML file from Google. You can save it and then load it into Google Earth. Your solution will be a longer file.
-
+This KML file only has one <placemark> element. Your solution will have many.
 ```
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
@@ -908,7 +913,7 @@ Here is a simple KML file from Google. You can save it and then load it into Goo
 </kml>
 ```
 
-You will also need to provide a screenshot showing Google Earth viewing the KML. Include the screenshot on your pdf that is submitted to Canvas.
+You will also need to provide a screenshot showing Google Earth viewing the KML. Include the screenshot in your submission.
 
 You should consider limiting the number of reducers to 1. You can do this by
 generating the same key from each mapper.
