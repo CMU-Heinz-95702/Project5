@@ -16,7 +16,7 @@ Both approaches exemplify the principle of spatial locality by moving computatio
 In Part 1 of this project, you will develop and execute MapReduce applications using Hadoop running inside the Docker environment introduced in Lab 9. If you did not complete lab 9, you may do so now. Or, you might complete it again so
 that you are familiar with the environment.
 
-In Part 2 of this project, you will use Apache Spark running locally within IntelliJ.
+In Part 2 of this project, you will use Apache Spark running locally in IntelliJ.
 
 This project builds directly on the work completed in Lab 9. You will use the same Docker-based Hadoop environment, the same HDFS workflow, and the same Hadoop 3.x programming model that were introduced in the lab.
 
@@ -423,12 +423,11 @@ workspace/
     └── Task7/
 ```
 
-Complete each task within its assigned directory.
+Complete each task in its assigned directory.
 
 Unless instructed otherwise, leave all task files in their original locations.
 
-Note that each task already has starter code with comments. Task0 only has
-a README.md file. We will copy WordCount.java into the Task0 directory.
+Note that each task already has starter code with comments. Task0 initially contains only a README.md file. You will copy WordCount.java into the Task0 directory.
 
 ---
 
@@ -578,16 +577,10 @@ The file:
 
 contains a complete Hadoop 3.x MapReduce application.
 
-Copy this file into:
-
-```text
-workspace/Part_1/Task0
-```
-
-For example:
+Copy this file into the Task0 directory:
 
 ```bash
-cp /home/public/WordCount.java Project5/Part_1/Task0
+cp /home/public/WordCount.java /home/student/Project5/Part_1/Task0
 ```
 
 The WordCount.java program serves as the reference implementation for the remainder of Part 1.
@@ -600,6 +593,9 @@ Study the program carefully and make sure that you understand:
 * ToolRunner
 * HDFS input paths
 * HDFS output paths
+* Context.write(...)
+* Key/value pairs emitted by the mapper
+* Key grouping performed before reduction
 
 The package declaration is:
 
@@ -630,7 +626,7 @@ Remove any existing output directory:
 ```bash
 hdfs dfs -rm -r -f /user/student/output
 ```
-Copy CountWords.java into the Task0 directory.
+Copy WordCount.java into the Task0 directory.
 
 From within Task0 do:
 
@@ -639,7 +635,9 @@ cp /home/public/WordCount.java WordCount.java
 
 ```
 
-Compile the application:
+Compile the application with the following command.
+Note, the -d . option causes the compiler to create the
+package directory hierarchy automatically.
 
 ```bash
 javac -classpath "$(hadoop classpath)" -d . WordCount.java
@@ -661,7 +659,7 @@ Make the input directory on our local system:
 mkdir -p /home/student/input
 ```
 
-Put some text in the input directory:
+For initial testing we will use a very small input file so that expected counts can easily be verified by inspection. Put some text in the input directory:
 
 ```bash
 printf "dog cat dog dog\n" > /home/student/input/test.txt
@@ -696,7 +694,9 @@ hadoop jar wordcount.jar edu.cmu.project5.task0.WordCount /user/student/task0/in
 After the job completes, examine the output stored on HDFS:
 
 ```bash
-hdfs dfs -cat /user/student/output/part-r-00000
+
+hdfs dfs -cat /user/student/task0/output/part-r-00000
+
 ```
 
 Merge the reducer output into a local file in a directory named output.
