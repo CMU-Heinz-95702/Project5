@@ -459,8 +459,6 @@ For Task 7, additionally submit:
 GoogleEarthScreenshot.png
 ```
 
-Detailed submission instructions will be provided on Canvas.
-
 ---
 
 # Future Automated Grading
