@@ -133,7 +133,7 @@ The directory:
 
 contains instructor-provided datasets and example programs.
 
-Example files include:
+The instructor provided files include:
 
 ```text
 words.txt
@@ -141,6 +141,10 @@ combinedYears.txt
 P1V.txt
 CrimeLatLonXYTabs.txt
 WordCount.java
+MaxTemperature.java
+MaxTemperatureMapper.java
+MaxTemperatureReducer.java
+
 ```
 
 You may read these files but should not modify them.
@@ -164,6 +168,7 @@ MapReduce jobs read their input from HDFS and write their output to HDFS.
 
 A typical workflow is:
 
+0. Make a directory for input on HDFS.
 1. Copy an input file from `/home/public` or `/home/student/Project5` into HDFS.
 2. Execute a MapReduce job.
 3. Examine the output written to HDFS.
@@ -233,6 +238,11 @@ From inside the container, verify that Hadoop services are running:
 lab-status
 ```
 
+Make an input directory on HDFS:
+
+```console
+hdfs dfs -mkdir -p /user/student/input
+```
 
 ---
 
@@ -244,6 +254,7 @@ The Hadoop services provide several web interfaces that can be viewed from a bro
 
 ```text
 http://localhost:9870
+
 ```
 
 The NameNode interface allows you to:
@@ -684,16 +695,11 @@ printf "dog cat dog dog\n" > /home/student/input/test.txt
 
 ```
 
-Make a directory to hold the input on HDFS:
-
-```
-hdfs dfs -mkdir -p /user/student/task0/input
-```
 
 Copy our local input to HDFS:
 
 ```
-hdfs dfs -copyFromLocal -f /home/student/input/test.txt /user/student/task0/input
+hdfs dfs -copyFromLocal -f /home/student/input/test.txt /user/student/input
 ```
 
 Remove any old output from HDFS:
@@ -1115,7 +1121,7 @@ public class WordCount extends Configured implements Tool {
 }
 
 //****************** MaxTemperatureMapper.java ************
-package edu.cmu.andrew.mm6;
+package edu.cmu.project5.task3;
 
 import java.io.IOException;
 
@@ -1172,7 +1178,7 @@ public class MaxTemperatureMapper
 
 // *********** MaxTemperatureReducer.java ****************
 
-package edu.cmu.andrew.mm6;
+package edu.cmu.project5.task3;
 
 import java.io.IOException;
 
@@ -1205,7 +1211,7 @@ public class MaxTemperatureReducer
 
 //*************** MaxTemperature.java ***************
 
-package edu.cmu.andrew.mm6;
+package edu.cmu.project5.task3;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
