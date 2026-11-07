@@ -291,7 +291,7 @@ Students are encouraged to use these interfaces while developing and debugging t
 
 The following commands will be helpful throughout the project.
 
-## Display Files on HDFS
+## Display Files on HDFS example
 
 ```bash
 hdfs dfs -ls /user/student/input
@@ -299,7 +299,7 @@ hdfs dfs -ls /user/student/input
 
 ---
 
-## Copy a Local File into HDFS
+## Copy a Local File into HDFS example
 
 ```bash
 hdfs dfs -copyFromLocal localFile.txt /user/student/input/localFile.txt
@@ -313,7 +313,7 @@ hdfs dfs -copyFromLocal -f localFile.txt /user/student/input/localFile.txt
 
 ---
 
-## Display a File Stored on HDFS
+## Display a File Stored on HDFS example
 
 ```bash
 hdfs dfs -cat /user/student/input/localFile.txt
@@ -321,7 +321,7 @@ hdfs dfs -cat /user/student/input/localFile.txt
 
 ---
 
-## Delete an HDFS Directory
+## Delete an HDFS Directory example
 
 ```bash
 hdfs dfs -rm -r -f /user/student/output
@@ -331,7 +331,7 @@ MapReduce jobs will fail if the output directory already exists.
 
 ---
 
-## Merge Reducer Output into a Single Local File
+## Merge Reducer Output into a Single Local File example
 
 ```bash
 hdfs dfs -getmerge /user/student/output mergedOutput.txt
@@ -339,7 +339,7 @@ hdfs dfs -getmerge /user/student/output mergedOutput.txt
 
 ---
 
-## List Running MapReduce Jobs
+## List Running MapReduce Jobs example
 
 ```bash
 mapred job -list
@@ -347,7 +347,7 @@ mapred job -list
 
 ---
 
-## List YARN Applications
+## List YARN Applications example
 
 ```bash
 yarn application -list -appStates ALL
@@ -355,7 +355,7 @@ yarn application -list -appStates ALL
 
 ---
 
-## Kill a Running Job
+## Kill a Running Job example
 
 ```bash
 mapred job -kill JOB_ID
