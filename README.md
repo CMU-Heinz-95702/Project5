@@ -287,11 +287,11 @@ Students are encouraged to use these interfaces while developing and debugging t
 
 ---
 
-# Useful Commands
+# Example Commands
 
-The following commands will be helpful throughout the project.
+The following commands may not yet run but will be helpful throughout the project.
 
-## Display Files on HDFS example
+## Display Files on HDFS
 
 ```bash
 hdfs dfs -ls /user/student/input
@@ -299,7 +299,7 @@ hdfs dfs -ls /user/student/input
 
 ---
 
-## Copy a Local File into HDFS example
+## Copy a Local File into HDFS to be used as input
 
 ```bash
 hdfs dfs -copyFromLocal localFile.txt /user/student/input/localFile.txt
@@ -313,7 +313,7 @@ hdfs dfs -copyFromLocal -f localFile.txt /user/student/input/localFile.txt
 
 ---
 
-## Display a File Stored on HDFS example
+## Display an input file stored on HDFS
 
 ```bash
 hdfs dfs -cat /user/student/input/localFile.txt
@@ -321,7 +321,7 @@ hdfs dfs -cat /user/student/input/localFile.txt
 
 ---
 
-## Delete an HDFS Directory example
+## Delete an HDFS directory named output
 
 ```bash
 hdfs dfs -rm -r -f /user/student/output
@@ -331,10 +331,10 @@ MapReduce jobs will fail if the output directory already exists.
 
 ---
 
-## Merge Reducer Output into a Single Local File example
+## Merge reducer output into a single local file
 
 ```bash
-hdfs dfs -getmerge /user/student/output mergedOutput.txt
+hdfs dfs -getmerge /user/student/output /home/student/Project5/Part_1/Task0/Task0Output
 ```
 
 ---
@@ -402,7 +402,7 @@ All MapReduce applications developed for this project should follow the same gen
 3. Configure a Job object.
 4. Specify HDFS input and output paths.
 5. Execute the job through Hadoop.
-6. Merge the results back to your local system
+6. Merge the results back to your local system under a Task.
 
 Task 0 serves as the reference implementation for the remaining MapReduce tasks.
 
@@ -461,7 +461,7 @@ GoogleEarthScreenshot.png
 
 ---
 
-# Future Automated Grading
+# Automated Grading
 
 To support automated grading, follow the required directory structure exactly.
 
@@ -526,7 +526,7 @@ Deploy and execute the jar file on HDFS.
 
 ### Step 6
 
-Merge reducer output into a local file.
+Merge reducer output into a local file under a Task.
 
 
 ### Step 7
@@ -537,7 +537,8 @@ Inspect the results.
 
 ## Reducer Output Files
 
-A MapReduce job may generate one or more reducer output files:
+A MapReduce job may generate one or more reducer output files and these
+will reside in the output directory (under HDFS).
 
 ```text
 part-r-00000
@@ -554,7 +555,7 @@ hdfs dfs -getmerge
 
 to merge reducer output into a single local file before examining the results.
 
-We will place our final output files in the Task subdirectory. For example,
+We will place our final output files in the Task subdirectories. For example,
 place the Task0 output file in /home/student/Project5/Part_1/Task0/Task0Output.
 
 ---
@@ -595,25 +596,30 @@ The package declaration is:
 package edu.cmu.project5.task0;
 ```
 
-After compilation, you will see the edu directory, corresponding
-to the start of the package path.
+After compilation, you will see the edu directory corresponding
+to the start of the package path. If you cd into edu then you
+will see cmu and so on.
 
 Future tasks will follow a similar package naming convention.
 
 ---
 
-## Running the Program
+## Complete solution steps for Task0
 
 Create an HDFS input directory:
 
 ```bash
 hdfs dfs -mkdir -p /user/student/input
 ```
-Old files may be removed from HDFS with the following command:
+Old files may be removed from HDFS with the following command. You will
+get an error if there are no files to delete.
 
 ```bash
 hdfs dfs -rm  /user/student/input/*
 ```
+
+We are using a standard directory for all of our input to MapReduce jobs
+on HDFS. We are using /user/student/input/ for input files.
 
 Copy an input file to HDFS:
 
@@ -621,13 +627,14 @@ Copy an input file to HDFS:
 hdfs dfs -copyFromLocal /home/public/words.txt /user/student/input/words.txt
 ```
 
-Remove any existing output directory:
+We are using a standard directory for all of our output files generated from MapReduce jobs on HDFS. We are using /user/student/output/ for all of our output files on HDFS.
+Remove an existing output directory:
 
 ```bash
 hdfs dfs -rm -r -f /user/student/output
 ```
 
-Copy WordCount.java into the Task0 directory.
+Copy WordCount.java into our local Task0 directory.
 
 ```bash
 cp /home/public/WordCount.java WordCount.java
@@ -636,7 +643,7 @@ cp /home/public/WordCount.java WordCount.java
 
 Compile the application with the following command.
 Note, the -d . option causes the compiler to create the
-package directory hierarchy automatically. You should see
+package directory hierarchy. You should see
 edu as a new directory after the compile.
 
 ```bash
@@ -653,10 +660,16 @@ jar -cvf wordcount.jar edu
 You should now see the following in Task0:
 ```
 ls
+```
+
+```
 edu  README.md	wordcount.jar  WordCount.java
 ```
 
 We need input placed on HDFS.
+
+We will use the directory /home/student/input for input before moving it
+to HDFS.
 
 Make the input directory on our local system:
 
@@ -689,7 +702,7 @@ Remove any old output from HDFS:
 hdfs dfs -rm -r -f /user/student/output
 ```
 
-Deploy and execute the jar:
+From within the Task0 directory, deploy and execute the jar:
 
 ```bash
 hadoop jar wordcount.jar edu.cmu.project5.task0.WordCount /user/student/input /user/student/output
