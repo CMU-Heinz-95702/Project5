@@ -916,6 +916,7 @@ generating the same key from each mapper.
 You may **not** use a large language model or any external source for this task.
 
 //************** WordCount.java *********************
+```
 package edu.cmu.project5.task0;
 
 // Java classes used for input/output exceptions and tokenization.
@@ -1119,8 +1120,12 @@ public class WordCount extends Configured implements Tool {
         System.exit(result);
     }
 }
+```
 
+```
 //****************** MaxTemperatureMapper.java ************
+
+
 package edu.cmu.project5.task3;
 
 import java.io.IOException;
@@ -1176,7 +1181,11 @@ public class MaxTemperatureMapper
     }
 }
 
+```
+
+```
 // *********** MaxTemperatureReducer.java ****************
+
 
 package edu.cmu.project5.task3;
 
@@ -1209,6 +1218,8 @@ public class MaxTemperatureReducer
     }
 }
 
+```
+```
 //*************** MaxTemperature.java ***************
 
 package edu.cmu.project5.task3;
@@ -1284,3 +1295,4 @@ public class MaxTemperature
         System.exit(result);
     }
 }
+```
