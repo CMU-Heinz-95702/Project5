@@ -748,8 +748,533 @@ Be sure to document WordCount.java with your own words describing what is going 
 
 ---
 
-## Task 1 Preview
+## Task 1
 
 In Task 1, you will modify the WordCount design to build a MapReduce application that computes letter frequencies rather than word frequencies.
 
 The structure, programming model, package organization, and Hadoop workflow used in Task 0 should serve as the foundation for your Task 1 solution.
+
+Working from WordCount.java, build and deploy a MapReduce application
+named LetterCounter.java and place it into a jar file called lettercount.jar.
+This program will compute the total number of each letter in the words.txt file. The output from the reducer will need to be merged to a single output file.
+
+The result will be left in your /home/student/Project5/Part_1/Task1/Task1Output file. The grader will be looking for this merged result file.
+
+Note that
+WordCount.java (Task 0) uses a call to nextToken() on the iterator. Without this call,
+the program will enter an infinite loop and will need to be killed.
+
+You may use a large language model or the web to help with this problem.
+Be sure to site any external sources in your code.
+
+### Task 2  
+
+Create a Java program named "FindPattern.java". It will be a modification of the WordCount.java code. FindPattern.java searches through words.txt and outputs any word that contains the string "fun". This is not a case sensitive search.
+The final output will be a single file containing a list of words that contain the string "fun". If the word "Fungia" appeared in the input, it too would be output. As was noted, the search is not case sensitive.
+
+All of these words will be listed in the following file:
+/home/student/Project5/Part_1/Task2/Task2Output. The grader will be looking for this merged result file.
+
+Here is the start of the final output with a few words that contain "fun":
+
+```
+Infundibulata
+afunction
+antifundamentalist
+defunct
+
+```
+
+You may use a large language model or the web to help with this problem.
+Be sure to site any external sources in your code.
+
+### Task 3
+
+In this task, we will use a fairly large dataset from Tom White's book.
+The data file is located at "/home/public/combinedYears.txt". It contains thousands of temperature readings
+(in Celsius times 10) in the USA by year from 1901 to 1902. The year is specified
+in positions 15-18. The temperature is specified beginning at column 87 and begins
+with a plus or minus character. Four digits are used for the temperature. Be sure
+to study the code below to see how it references these locations.
+
+Below are three files: MaxTemperature.java, MaxTemperatureMapper.java and MaxTemperatureReducer.java. These files may be found at /home/public. Copy these files to your
+/home/userID/Project5/Part_1/Task3 directory.
+
+Run this application against the data set under /home/public/combinedYears.txt. Your jar file will
+be named temperature.jar.  The output should be left in your
+/home/userID/Project5/Part_1/Task3/Task3Output file. The grader will be looking for this merged result file.
+
+You may use a large language model or the web to help with this problem.
+Be sure to site any external sources in your code.
+
+### Task 4
+
+Modify the code from Task 3 and build a minimum temperature application. Note that the
+temperatures in this file are degrees Celsius * 10.  Your jar file will be named
+mintemperature.jar.  The output should be left in your
+/home/userID/Project5/Part_1/Task4/Task4Output
+file. The grader will be looking for this merged result file.
+
+You may use a large language model or the web to help with this problem.
+Be sure to site any external sources in your code.
+
+### Task 5
+
+Within the /home/public directory, there is a file called P1V.txt.
+
+P1V.txt is a tab delimited text file with a individual criminal offense incidents
+from January 1990 through December 1999 for serious violent crimes (FBI Part 1) in Pittsburgh.
+
+The first two columns (X,Y) represent State Plane (projected, rectilinear) coordinates (measured
+in feet) specifying the location of the crime.
+The third column is the time.
+The fourth column is a street address.
+The fifth column is the type of offense (aggravated assault, Robbery, Rape, Etc.)
+The sixth column is the date.
+The seventh column is the 2000 census tract.
+
+Write a MapReduce application that finds the total number of aggravated assaults and
+robberies. If there were 100 aggravated assaults and 50 robberies then this program
+would generate the value 150 to an output file.
+
+Your jar file will be named aggrvatedassaultsplusrobberies.jar. The output should be left
+in your /home/userID/Project5/Part_1/Task5/Task5Output file. The grader will be looking for this merged result file.
+
+You may **not** use a large language model or any external source for this task.
+
+### Task 6
+
+Modify your solution to Task 5 so that it finds the total number of aggravated assault crimes that occurred within
+350 meters of 3803 Forbes Avenue in Oakland. This location has the (X,Y) coordinates of
+(1354326.897,411447.7828). Use these coordinates and the Pythagorean theorem to decide if a particular
+aggravated assault occurred within 350 meters of 3803 Forbes Avenue. State plane coordinates are measured in feet.
+Your code is testing on meters.
+
+Your jar file will be named oaklandcrimestats.jar. The output should be left
+in your /home/userID/Project5/Part_1/Task6/Task6Output file. The grader will be looking for this merged result file.
+
+You may **not** use a large language model or any external source for this task.
+
+### Task 7
+
+
+In Task 7, the input file is named CrimeLatLonXYTabs.txt. It can be copied from the /home/public directory.
+Its format is similar to P1V.txt but also includes the latitude and longitude of each crime.
+
+CrimeLatLonXYTabs.txt is a tab delimited text file with a individual criminal offense incidents
+from January 1990 through December 1999 for serious violent crimes (FBI Part 1) in Pittsburgh.
+
+The first two columns (X,Y) represent State Plane (projected, rectilinear) coordinates (measured
+in feet) specifying the location of the crime.
+The third column is the time.
+The fourth column is a street address.
+The fifth column is the type of offense (aggravated assault, rape, Etc.)
+The sixth column is the date.
+The seventh column is the 2000 census tract.
+The eight column specifies the latitude.
+The ninth column specifies the longitude.
+
+These last two columns are used for viewing in GIS tools (such as Google Earth Pro).
+
+Modify your solution to Task 5 so that it finds all of the aggravated assault
+crimes that occurred within 350 meters of 3803 Forbes Avenue in Oakland. This location has
+the (X,Y) coordinates of (1354326.897,411447.7828). Use these coordinates and the Pythagorean
+theorem to decide if a particular aggravated assault occurred within 350 meters of 3803 Forbes
+Avenue. State plane coordinates are measured in feet. Your code is testing on meters.
+
+Your jar file will be named oaklandcrimestatskml.jar. The output file will be a well formed KML file
+suitable for viewing in Google Earth. The KML file will be used to display each of these crimes on
+a map. The output file will be left in your /home/userID/Project5/Part_1/Task7/Task7Output file. The grader will be looking for this merged result file.
+
+Here is a simple KML file from Google. You can save it and then load it into Google Earth. Your solution will be a longer file.
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Placemark>
+    <name>Simple placemark</name>
+    <description>Attached to the ground. Intelligently places itself
+       at the height of the underlying terrain.</description>
+    <Point>
+      <coordinates>-122.0822035425683,37.42228990140251,0</coordinates>
+    </Point>
+  </Placemark>
+</kml>
+```
+
+You will also need to provide a screenshot showing Google Earth viewing the KML. Include the screenshot on your pdf that is submitted to Canvas.
+
+You should consider limiting the number of reducers to 1. You can do this by
+generating the same key from each mapper.
+
+You may **not** use a large language model or any external source for this task.
+
+//************** WordCount.java *********************
+package edu.cmu.project5.task0;
+
+// Java classes used for input/output exceptions and tokenization.
+import java.io.IOException;
+import java.util.StringTokenizer;
+
+// Hadoop configuration classes.
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.Configured;
+
+// Hadoop filesystem path class.
+import org.apache.hadoop.fs.Path;
+
+// Hadoop writable data types used during MapReduce processing.
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+
+// Hadoop MapReduce classes.
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
+
+// Hadoop input and output format classes.
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+// Hadoop utility classes used to launch the job.
+import org.apache.hadoop.util.Tool;
+import org.apache.hadoop.util.ToolRunner;
+
+/**
+ * WordCount.java
+ *
+ * Author: Your Name Here
+ *
+ * Purpose:
+ * Demonstrates a complete Hadoop MapReduce application.
+ *
+ * The mapper reads text and emits:
+ *
+ *     (word, 1)
+ *
+ * for each word in the input.
+ *
+ * The reducer receives:
+ *
+ *     (word, [1,1,1,...])
+ *
+ * and adds the values to produce:
+ *
+ *     (word, count)
+ *
+ * Input:
+ *     Text file stored on HDFS.
+ *
+ * Output:
+ *     Word frequencies written to HDFS.
+ */
+public class WordCount extends Configured implements Tool {
+
+    /**
+     * Mapper
+     *
+     * Receives one line of text at a time.
+     * Emits (word,1) for every word found in the line.
+     */
+    public static class WordMapper
+            extends Mapper<LongWritable, Text, Text, IntWritable> {
+
+        // Reusable constant that represents the value 1.
+        private static final IntWritable ONE = new IntWritable(1);
+
+        // Reusable Text object used as the output key.
+        private final Text word = new Text();
+
+        /**
+         * Called once for each line of input.
+         *
+         * key     = byte offset of line within file
+         * value   = contents of the line
+         * context = mechanism for writing mapper output
+         */
+        @Override
+        protected void map(LongWritable key,
+                           Text value,
+                           Context context)
+                throws IOException, InterruptedException {
+
+            // Convert the Hadoop Text object into a Java String.
+            String line = value.toString();
+
+            // Split the line into tokens separated by whitespace.
+            StringTokenizer tokenizer = new StringTokenizer(line);
+
+            // Process each word in the line.
+            while (tokenizer.hasMoreTokens()) {
+
+                // Store the current word in the Text object.
+                word.set(tokenizer.nextToken());
+
+                // Emit (word,1).
+                context.write(word, ONE);
+            }
+        }
+    }
+
+    /**
+     * Reducer
+     *
+     * Receives:
+     *
+     *     (word, [1,1,1,1,...])
+     *
+     * Adds the values together and emits:
+     *
+     *     (word,totalCount)
+     */
+    public static class WordReducer
+            extends Reducer<Text, IntWritable, Text, IntWritable> {
+
+        /**
+         * Called once for each unique word.
+         */
+        @Override
+        protected void reduce(Text key,
+                              Iterable<IntWritable> values,
+                              Context context)
+                throws IOException, InterruptedException {
+
+            // Running total for the current word.
+            int sum = 0;
+
+            // Add all counts associated with this word.
+            for (IntWritable value : values) {
+                sum += value.get();
+            }
+
+            // Emit the final count for the word.
+            context.write(key, new IntWritable(sum));
+        }
+    }
+
+    /**
+     * Configures and launches the MapReduce job.
+     *
+     * args[0] = HDFS input path
+     * args[1] = HDFS output path
+     */
+    @Override
+    public int run(String[] args) throws Exception {
+
+        // Verify that exactly two command-line arguments were supplied.
+        if (args.length != 2) {
+            System.err.println(
+                    "Usage: WordCount <input-path> <output-path>");
+            return 2;
+        }
+
+        // Create a new Hadoop job named "wordcount".
+        Job job = Job.getInstance(getConf(), "wordcount");
+
+        // Identify the class containing the main method.
+        job.setJarByClass(WordCount.class);
+
+        // Specify the mapper class.
+        job.setMapperClass(WordMapper.class);
+
+        // Specify the reducer class.
+        job.setReducerClass(WordReducer.class);
+
+        // Specify the mapper/reducer output key type.
+        job.setOutputKeyClass(Text.class);
+
+        // Specify the mapper/reducer output value type.
+        job.setOutputValueClass(IntWritable.class);
+
+        // Set the HDFS input directory or file.
+        FileInputFormat.addInputPath(job, new Path(args[0]));
+
+        // Set the HDFS output directory.
+        FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
+        // Submit the job and wait for completion.
+        return job.waitForCompletion(true) ? 0 : 1;
+    }
+
+    /**
+     * Program entry point.
+     */
+    public static void main(String[] args) throws Exception {
+
+        // Launch the Tool and return its exit code.
+        int result =
+                ToolRunner.run(
+                        new Configuration(),
+                        new WordCount(),
+                        args);
+
+        // Terminate the JVM with the result code.
+        System.exit(result);
+    }
+}
+
+//****************** MaxTemperatureMapper.java ************
+package edu.cmu.andrew.mm6;
+
+import java.io.IOException;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+
+public class MaxTemperatureMapper
+        extends Mapper<LongWritable, Text, Text, IntWritable> {
+
+    private static final int MISSING = 9999;
+
+    private final Text yearText = new Text();
+
+    @Override
+    protected void map(LongWritable key,
+                       Text value,
+                       Context context)
+            throws IOException, InterruptedException {
+
+        // Convert Hadoop Text to Java String.
+        String line = value.toString();
+
+        // Extract year from positions 15-18.
+        String year = line.substring(15, 19);
+
+        // Extract air temperature.
+        int airTemperature;
+
+        if (line.charAt(87) == '+') {
+            airTemperature =
+                    Integer.parseInt(line.substring(88, 92));
+        } else {
+            airTemperature =
+                    Integer.parseInt(line.substring(87, 92));
+        }
+
+        // Extract quality code.
+        String quality = line.substring(92, 93);
+
+        // Emit (year, temperature) if temperature is valid.
+        if (airTemperature != MISSING
+                && quality.matches("[01459]")) {
+
+            yearText.set(year);
+
+            context.write(
+                    yearText,
+                    new IntWritable(airTemperature));
+        }
+    }
+}
+
+// *********** MaxTemperatureReducer.java ****************
+
+package edu.cmu.andrew.mm6;
+
+import java.io.IOException;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Reducer;
+
+public class MaxTemperatureReducer
+        extends Reducer<Text, IntWritable,
+                        Text, IntWritable> {
+
+    @Override
+    protected void reduce(Text key,
+                          Iterable<IntWritable> values,
+                          Context context)
+            throws IOException, InterruptedException {
+
+        int maxValue = Integer.MIN_VALUE;
+
+        for (IntWritable value : values) {
+            maxValue =
+                    Math.max(maxValue, value.get());
+        }
+
+        context.write(
+                key,
+                new IntWritable(maxValue));
+    }
+}
+
+//*************** MaxTemperature.java ***************
+
+package edu.cmu.andrew.mm6;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.fs.Path;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+
+import org.apache.hadoop.mapreduce.Job;
+
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+import org.apache.hadoop.util.Tool;
+import org.apache.hadoop.util.ToolRunner;
+
+public class MaxTemperature
+        extends Configured
+        implements Tool {
+
+    @Override
+    public int run(String[] args) throws Exception {
+
+        if (args.length != 2) {
+            System.err.println(
+                "Usage: MaxTemperature <input-path> <output-path>");
+            return 2;
+        }
+
+        Job job =
+                Job.getInstance(
+                        getConf(),
+                        "Max temperature");
+
+        job.setJarByClass(MaxTemperature.class);
+
+        job.setMapperClass(
+                MaxTemperatureMapper.class);
+
+        job.setReducerClass(
+                MaxTemperatureReducer.class);
+
+        job.setOutputKeyClass(Text.class);
+
+        job.setOutputValueClass(
+                IntWritable.class);
+
+        FileInputFormat.addInputPath(
+                job,
+                new Path(args[0]));
+
+        FileOutputFormat.setOutputPath(
+                job,
+                new Path(args[1]));
+
+        return job.waitForCompletion(true)
+                ? 0
+                : 1;
+    }
+
+    public static void main(String[] args)
+            throws Exception {
+
+        int result =
+                ToolRunner.run(
+                        new Configuration(),
+                        new MaxTemperature(),
+                        args);
+
+        System.exit(result);
+    }
+}
