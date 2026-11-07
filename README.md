@@ -554,6 +554,9 @@ hdfs dfs -getmerge
 
 to merge reducer output into a single local file before examining the results.
 
+We will place our final output files in the Task subdirectory. For example,
+place the Task0 output file in /home/student/Project5/Part_1/Task0/Task0Output.
+
 ---
 
 # Task 0 - Word Count
@@ -623,8 +626,8 @@ Remove any existing output directory:
 ```bash
 hdfs dfs -rm -r -f /user/student/output
 ```
-Copy WordCount.java into the Task0 directory.
 
+Copy WordCount.java into the Task0 directory.
 
 ```bash
 cp /home/public/WordCount.java WordCount.java
@@ -701,35 +704,28 @@ hdfs dfs -cat /user/student/output/part-r-00000
 
 ```
 
-Merge the reducer output into a local file in a directory named output.
-First, create the output directory:
+Merge the reducer output into a local file named /home/student/Project5/Part_1/Task0/Task0Output
+
 
 ```
-mkdir -p /home/student/output
-
-```
-
-Merge the results back to our local system:
-
-```
-hdfs dfs -getmerge /user/student/output /home/student/output/result.txt
+hdfs dfs -getmerge /user/student/output /home/student/Project5/Part_1/Task0/Task0Output
 
 ```
 View the results:
 
 ```
-cat /home/student/output/result.txt
+cat /home/student/Project5/Part_1/Task0/Task0Output
 ```
 
 ---
 
 ## Deliverables
 
-The grader will examine:
+A grader may examine:
 
 * Source code documentation in WordCount.java
 * Successful program execution
-* results.txt
+* Task0Output
 
 You may use a large language model or web resources for this task.
 
