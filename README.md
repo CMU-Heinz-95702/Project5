@@ -571,6 +571,16 @@ place the Task0 output file in /home/student/Project5/Part_1/Task0/Task0Output.
 
 ---
 
+## Auto-grader Concern
+
+All MapReduce programs must accept exactly two command-line arguments:
+
+Plain Text
+<input-path> <output-path>
+
+corresponding to the HDFS input and output paths. Programs must not hard-code HDFS paths. The grading system may use hidden datasets and HDFS directories that differ from those used during development.
+
+
 # Task 0 - Word Count
 
 The file:
@@ -743,8 +753,15 @@ cat /home/student/Project5/Part_1/Task0/Task0Output
 A grader may examine:
 
 * Source code documentation in WordCount.java
-* Successful program execution
-* Task0Output
+* Successful program compilation and execution
+
+The reducer output should be merged into a local file named:
+
+/home/student/Project5/Part_1/Task0/Task0Output
+
+This file is provided for your convenience during development. The grading system will compile and execute your MapReduce program using test and hidden datasets rather than grading this file directly.
+
+Programs must execute correctly without modification and must accept input and output paths through command-line arguments.
 
 You may use a large language model or web resources for this task.
 
@@ -760,39 +777,83 @@ In Task 1, you will modify the WordCount design to build a MapReduce application
 
 The structure, programming model, package organization, and Hadoop workflow used in Task 0 should serve as the foundation for your Task 1 solution.
 
+Count letters in a case-insensitive manner. Ignore digits, punctuation, and whitespace.
+
 Working from WordCount.java, build and deploy a MapReduce application
 named LetterCounter.java and place it into a jar file called lettercount.jar.
 This program will compute the total number of each letter in the words.txt file. The output from the reducer will need to be merged to a single output file.
 
-The result will be left in your /home/student/Project5/Part_1/Task1/Task1Output file. The grader will be looking for this merged result file.
+The reducer output should be merged into a local file named:
+
+/home/student/Project5/Part_1/Task1/Task1Output
+ 
+This file is intended to help you inspect and debug your results during development.
 
 Note that
 WordCount.java (Task 0) uses a call to nextToken() on the iterator. Without this call,
 the program will enter an infinite loop and will need to be killed.
 
 You may use a large language model or the web to help with this problem.
-Be sure to site any external sources in your code.
+Be sure to cite any external sources in your code.
+
+## Deliverables
+
+A grader may examine:
+
+* Source code documentation in LetterCounter.java
+* Successful program compilation and execution
+
+The reducer output should be merged into a local file named:
+
+/home/student/Project5/Part_1/Task1/Task1Output
+
+This file is provided for your convenience during development. The grading system will compile and execute your MapReduce program using test and hidden datasets rather than grading this file directly.
+
+Programs must execute correctly without modification and must accept input and output paths through command-line arguments.
+
+You may use a large language model or web resources for this task.
+
+Any external assistance must be documented within your source code comments.
+
+Be sure to document LetterCounter.java with your own words describing what is going on.
+
 
 ### Task 2  
 
-Create a Java program named "FindPattern.java". It will be a modification of the WordCount.java code. FindPattern.java searches through words.txt and outputs any word that contains the string "fun". This is not a case sensitive search.
-The final output will be a single file containing a list of words that contain the string "fun". If the word "Fungia" appeared in the input, it too would be output. As was noted, the search is not case sensitive.
+Build a MapReduce application named FindPattern.java. For each word containing the string "fun" (case insensitive), emit the word as the key and the value 1. The reducer will sum the values for each matching word. The final output should therefore contain each distinct matching word together with the number of times it appears in the input.
 
-All of these words will be listed in the following file:
-/home/student/Project5/Part_1/Task2/Task2Output. The grader will be looking for this merged result file.
+The search for "fun" is case insensitive. Convert matching words to lowercase before emitting them so that words differing only in capitalization are counted together.
 
-Here is the start of the final output with a few words that contain "fun":
+Your program must accept exactly two command-line arguments:
 
-```
-Infundibulata
-afunction
-antifundamentalist
-defunct
+<input-path> <output-path>
 
-```
+The input path specifies the HDFS file or directory to be processed. The output path specifies the HDFS directory where reducer output will be written. Do not hard-code HDFS paths in your solution. Hidden tests may use inputs and outputs located in different HDFS directories.
 
 You may use a large language model or the web to help with this problem.
-Be sure to site any external sources in your code.
+Be sure to cite any external sources in your code.
+
+## Deliverables
+
+A grader may examine:
+
+* Source code documentation in FindPattern.java
+* Successful program compilation and execution
+
+The reducer output should be merged into a local file named:
+
+/home/student/Project5/Part_1/Task2/Task2Output
+
+This file is provided for your convenience during development. The grading system will compile and execute your MapReduce program using test and hidden datasets rather than grading this file directly.
+
+Programs must execute correctly without modification and must accept input and output paths through command-line arguments.
+
+You may use a large language model or web resources for this task.
+
+Any external assistance must be documented within your source code comments.
+
+Be sure to document FindPattern.java with your own words describing what is going on.
+
 
 ### Task 3
 
@@ -808,29 +869,86 @@ These files may be found at /home/public. Copy these files to your
 /home/student/Project5/Part_1/Task3 directory.
 
 Run this application against the data set under /home/public/combinedYears.txt. Your jar file will
-be named temperature.jar.  The output should be left in your
-/home/student/Project5/Part_1/Task3/Task3Output file. The grader will be looking for this merged result file.
+be named temperature.jar.  
+
+Your program must accept exactly two command-line arguments:
+
+<input-path> <output-path>
+
+The input path specifies the HDFS file or directory to be processed. The output path specifies the HDFS directory where reducer output will be written. Do not hard-code HDFS paths in your solution. Hidden tests may use inputs and outputs located in different HDFS directories.
 
 You may use a large language model or the web to help with this problem.
-Be sure to site any external sources in your code.
+Be sure to cite any external sources in your code.
+
+## Deliverables
+
+A grader may examine:
+
+* Source code documentation in MaxTemperature.java, MaxTemperatureMapper.java and MaxTemperatureReducer.java.
+* Successful program compilation and execution
+
+The reducer output should be merged into a local file named:
+
+/home/student/Project5/Part_1/Task3/Task3Output
+
+This file is provided for your convenience during development. The grading system will compile and execute your MapReduce program using test and hidden datasets rather than grading this file directly.
+
+Programs must execute correctly without modification and must accept input and output paths through command-line arguments.
+
+The package declarations provided in the starter files should not be changed.
+
+You may use a large language model or web resources for this task.
+
+Any external assistance must be documented within your source code comments.
+
+Be sure to document your Java source code with your own words describing what is going on.
+
 
 ### Task 4
 
 Modify the code from Task 3 and build a minimum temperature application. Note that the
 temperatures in this file are degrees Celsius * 10.  Your jar file will be named
-mintemperature.jar.  The output should be left in your
-/home/student/Project5/Part_1/Task4/Task4Output
-file. The grader will be looking for this merged result file.
+mintemperature.jar.
+
+The source code files will be named MinTemperature.java, MinTemperatureMapper.java and MinTemperatureReducer.java.
+
+Your program must accept exactly two command-line arguments:
+
+<input-path> <output-path>
+
+The input path specifies the HDFS file or directory to be processed. The output path specifies the HDFS directory where reducer output will be written. Do not hard-code HDFS paths in your solution. Hidden tests may use inputs and outputs located in different HDFS directories.
 
 You may use a large language model or the web to help with this problem.
-Be sure to site any external sources in your code.
+Be sure to cite any external sources in your code.
+
+## Deliverables
+
+A grader may examine:
+
+* Source code documentation in MinTemperature.java, MinTemperatureMapper.java and MinTemperatureReducer.java.
+* Successful program compilation and execution
+
+The reducer output should be merged into a local file named:
+
+/home/student/Project5/Part_1/Task4/Task4Output
+
+This file is provided for your convenience during development. The grading system will compile and execute your MapReduce program using test and hidden datasets rather than grading this file directly.
+
+Programs must execute correctly without modification and must accept input and output paths through command-line arguments.
+
+The package declarations provided in the starter files should not be changed.
+
+You may use a large language model or web resources for this task.
+
+Any external assistance must be documented within your source code comments.
+
+Be sure to document your Java source code with your own words describing what is going on.
 
 ### Task 5
 
 Within the /home/public directory, there is a file called P1V.txt.
 
-P1V.txt is a tab delimited text file with a individual criminal offense incidents
-from January 1990 through December 1999 for serious violent crimes (FBI Part 1) in Pittsburgh.
+P1V.txt is a tab-delimited text file containing individual criminal offense incidents from January 1990 through December 1999 for serious violent crimes (FBI Part 1) in Pittsburgh.
 
 The first two columns (X,Y) represent State Plane (projected, rectilinear) coordinates (measured
 in feet) specifying the location of the crime.
@@ -841,38 +959,114 @@ The sixth column is the date.
 The seventh column is the 2000 census tract.
 
 Write a MapReduce application that finds the total number of aggravated assaults and
-robberies. If there were 100 aggravated assaults and 50 robberies then this program
-would generate the value 150 to an output file.
+robberies. If there were 100 aggravated assaults and 50 robberies then the reducer
+will generate the following single line with a key and value pair.
 
-Your jar file will be named aggrvatedassaultsplusrobberies.jar. The output should be left
-in your /home/student/Project5/Part_1/Task5/Task5Output file. The grader will be looking
-for this merged result file.
+```text
+crimes   150
+```
 
-You may **not** use a large language model or any external source for this task. You
-may use code from Task 4.
+Your single Java program will be named AggravatedAssaultsPlusRobberies.java.
+
+Your program must accept exactly two command-line arguments:
+
+<input-path> <output-path>
+
+The input path specifies the HDFS file or directory to be processed. The output path specifies the HDFS directory where reducer output will be written. Do not hard-code HDFS paths in your solution. Hidden tests may use inputs and outputs located in different HDFS directories.
+
+Your jar file will be named aggravatedassaultsplusrobberies.jar.
+
+## Deliverables
+
+A grader may examine:
+
+* Source code documentation in AggravatedAssaultsPlusRobberies.java.
+* Successful program compilation and execution
+
+The reducer output should be merged into a local file named:
+
+/home/student/Project5/Part_1/Task5/Task5Output
+
+This file is provided for your convenience during development. The grading system will compile and execute your MapReduce program using test and hidden datasets rather than grading this file directly.
+
+Programs must execute correctly without modification and must accept input and output paths through command-line arguments.
+
+The package declarations provided in the starter files should not be changed.
+
+You should *not* use a large language model or web resources for this task. You may
+use work from previous Tasks.
+
+Be sure to document your Java source code with your own words describing what is going on.
+
 
 ### Task 6
 
 Modify your solution to Task 5 so that it finds the total number of aggravated assault crimes that occurred within
 350 meters of 3803 Forbes Avenue in Oakland. This location has the (X,Y) coordinates of
 (1354326.897,411447.7828). Use these coordinates and the Pythagorean theorem to decide if a particular
-aggravated assault occurred within 350 meters of 3803 Forbes Avenue. State plane coordinates are measured in feet.
-Your code is testing on meters.
+aggravated assault occurred within 350 meters of 3803 Forbes Avenue.
 
-Your jar file will be named oaklandcrimestats.jar. The output should be left
-in your /home/student/Project5/Part_1/Task6/Task6Output file. The grader will be looking
-for this merged result file.
+The distance requirement is specified in meters, but the state plane coordinates are measured in feet.
 
-You may **not** use a large language model or any external source for this task. You
-may use code from Task 5.
+Use:
+
+1 meter = 3.28084 feet
+
+Therefore:
+
+350 meters × 3.28084 = 1148.294 feet
+
+A crime is considered within range if its distance from
+(1354326.897, 411447.7828) is less than or equal to
+1148.294 feet.
+
+If there were 42 aggravated assaults within 350 meters of 3803 Forbes Avenue, then the reducer would emit
+exactly one key/value pair:
+
+```text
+crimes    42
+```
+Count only aggravated assault crimes. All other crime categories should be ignored.
+
+Your jar file will be named oaklandcrimestats.jar.
+
+Your single Java program will be named OaklandCrimeStats.java.
+
+Your program must accept exactly two command-line arguments:
+
+<input-path> <output-path>
+
+The input path specifies the HDFS file or directory to be processed. The output path specifies the HDFS directory where reducer output will be written. Do not hard-code HDFS paths in your solution. Hidden tests may use inputs and outputs located in different HDFS directories.
+
+
+## Deliverables
+
+A grader may examine:
+
+* Source code documentation in OaklandCrimeStats.java.
+* Successful program compilation and execution
+
+The reducer output should be merged into a local file named:
+
+/home/student/Project5/Part_1/Task6/Task6Output
+
+This file is provided for your convenience during development. The grading system will compile and execute your MapReduce program using test and hidden datasets rather than grading this file directly.
+
+Programs must execute correctly without modification and must accept input and output paths through command-line arguments.
+
+The package declarations provided in the starter files should not be changed.
+
+You may *not* use a large language model or web resources for this task. You may
+use work from previous Tasks.
+
+Be sure to document your Java source code with your own words describing what is going on.
 
 ### Task 7
-
 
 In Task 7, the input file is named CrimeLatLonXYTabs.txt. It can be copied from the /home/public directory.
 Its format is similar to P1V.txt but also includes the latitude and longitude of each crime.
 
-CrimeLatLonXYTabs.txt is a tab delimited text file with a individual criminal offense incidents
+CrimeLatLonXYTabs.txt is a tab-delimited text file containing individual criminal offense incidents
 from January 1990 through December 1999 for serious violent crimes (FBI Part 1) in Pittsburgh.
 
 The first two columns (X,Y) represent State Plane (projected, rectilinear) coordinates (measured
@@ -891,34 +1085,79 @@ Modify your solution to Task 5 so that it finds all of the aggravated assault
 crimes that occurred within 350 meters of 3803 Forbes Avenue in Oakland. This location has
 the (X,Y) coordinates of (1354326.897,411447.7828). Use these coordinates and the Pythagorean
 theorem to decide if a particular aggravated assault occurred within 350 meters of 3803 Forbes
-Avenue. State plane coordinates are measured in feet. Your code is testing on meters.
+Avenue. State plane coordinates are measured in feet. Your code is testing on meters. Use the same
+distance calculation and conversion factors described in Task 6.
+
+Your single Java program will be named OaklandCrimeStatsKML.java.
 
 Your jar file will be named oaklandcrimestatskml.jar. The output file will be a well formed KML file
 suitable for viewing in Google Earth. The KML file will be used to display each of these crimes on
-a map. The output file will be left in your /home/student/Project5/Part_1/Task7/Task7Output file. The grader will be looking for this merged result file.
+a map.
+The reducer output should be merged into a local file named:
 
-Here is a simple KML file from Google. You can save it and then load it into Google Earth. Your solution will be a longer file.
-This KML file only has one <placemark> element. Your solution will have many.
+/home/student/Project5/Part_1/Task7/Task7Output
+
+This file is provided for your convenience during development. The grading system will compile and execute your MapReduce program using test and hidden datasets rather than grading this file directly.
+
+Your program must accept exactly two command-line arguments:
+
+<input-path> <output-path>
+
+The input path specifies the HDFS file or directory to be processed. The output path specifies the HDFS directory where reducer output will be written. Do not hard-code HDFS paths in your solution. Hidden tests may use inputs and outputs located in different HDFS directories.
+
+The output KML file must contain one <Placemark> element for each aggravated assault crime that satisfies the distance requirement. The ordering of the placemarks in the output file is not important.
+
+Each <Placemark> element must contain a <Point> element and a <coordinates> element in the format:
+
+```text
+longitude,latitude,0
 ```
+
+where the longitude and latitude values are taken directly from the input file.
+
+Here is a simple KML file. You can save it and then load it into Google Earth. Your solution will be a longer file.
+This KML file only has one <placemark> element. Your solution will have many.
+
+```text
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
-  <Placemark>
-    <name>Simple placemark</name>
-    <description>Attached to the ground. Intelligently places itself
-       at the height of the underlying terrain.</description>
-    <Point>
-      <coordinates>-122.0822035425683,37.42228990140251,0</coordinates>
-    </Point>
-  </Placemark>
+<Placemark>
+  <Point>
+    <coordinates>
+      -79.9456,40.4406,0
+    </coordinates>
+  </Point>
+</Placemark>  
 </kml>
 ```
 
-You will also need to provide a screenshot showing Google Earth viewing the KML. Include the screenshot in your submission.
+You can test your KML formatting by viewing your KML file in Google Earth. You will not include
+the screenshot in your submission. The submission is auto graded by parsing the resulting KML,
+validating its structure, and verifying the generated placemarks and coordinates.
 
 You should consider limiting the number of reducers to 1. You can do this by
 generating the same key from each mapper.
 
-You may **not** use a large language model or any external source for this task.
+
+## Deliverables
+
+A grader may examine:
+
+* Source code documentation in OaklandCrimeStatsKML.java
+* Successful program compilation and execution
+* A well-formed KML file
+
+Programs must execute correctly without modification and must accept input and output paths through command-line arguments.
+
+The package declarations provided in the starter files should not be changed.
+
+You may not use a large language model or web resources for this task.
+
+Be sure to document your Java source code with your own words describing what is going on.
+
+
+
+
 
 //************** WordCount.java *********************
 ```
@@ -1301,3 +1540,150 @@ public class MaxTemperature
     }
 }
 ```
+
+## Part 2 Spark Programming
+
+In Part 2, we are not auto-grading. You will submit a single pdf file to Gradescope.
+
+You may use a large language model or the web to help with the questions in Part 2.
+Be sure to site any external sources in your code.
+
+In this part, we will be running Spark within IntelliJ. This is similar to what
+we did in [Lab 9](https://github.com/CMU-Heinz-95702/lab9-MapReduceAndSpark). Note that in
+this part, we need to use JDK 8 rather than JDK 17. There is a known issue with using
+Spark and JDK 17.
+
+When you first run IntelliJ, be sure to select a JDK 8 compiler (JDK 1.8 is the same thing).
+
+Begin by working with the following input file named "ShortTextFile".
+
+
+```
+ABCD
+EFGH
+IJK LMN OP;/
+QRST U
+V WXYZ
+WXYZ
+abcd
+
+cool beans
+```
+This file is intentionally small enough that the correct results can be verified by inspection. Your Spark program should produce the following values:
+
+```
+Number of lines: 9
+Number of words: 13
+Number of distinct words: 12
+Number of symbols: 51
+Number of distinct symbols: 39
+Number of distinct letters: 35
+```
+
+For this project, count lines, words, and distinct words exactly as produced by the specified Spark transformations. A symbol is any individual character. A letter is an alphabetic character (A-Z or a-z). For distinct letters, uppercase and lowercase letters are considered different.
+
+If your Spark program computes these same values on this small dataset, it will work well for the larger
+one.  
+
+We will be using a data file found on the course schedule. This data file is "All's Well That Ends Well" by William Shakespeare. The file is found at the following link:
+
+[All's Well That Ends Well](http://www.andrew.cmu.edu/course/95-702/homework/data/SparkDataFiles/AllsWellThatEndsWell.txt)
+
+You need to download "All's Well That Ends Well" to your local machine and set both your working directory and the file name in IntelliJ. See [Lab 9](https://github.com/CMU-Heinz-95702/lab9-MapReduceAndSpark) for detailed directions on setting up IntelliJ to run a Spark application with an input file.
+
+
+### Part 2 Summary
+
+Write a Java program that uses Spark to read "All's Well That Ends Well" and perform various calculations. The name of the program is ShakespeareAnalytics.java.
+
+Simply add each task below to the code in the file ShakespeareAnalytics.java. This one file will contain all of the functionality listed here as separate tasks.
+
+Include your labelled and well-formatted code in the pdf submission. Include an output interaction as well. The output will be a copy and paste of the IntelliJ output window. At the bottom, the interaction will show the results of searching for the string "love" in "All's Well That Ends Well". The string "love" appears, for example, in the word "cloven". The string "love" does not appear in the string "Love". Our search is case-sensitive. See Task 6.
+
+The screen scrape of the output must include all of the "Info" lines that are generated by IntelliJ. Your program output will be interspersed in this output.
+
+For debugging and development, it is a good idea (but not required) to pepper your development code with lines that write RDD's to a file. It is fine if you leave such code in your final submission. The following is an example from my solution:
+
+```
+ pairData.saveAsTextFile("002_WordsPairedWith1");
+
+```
+
+### Documentation
+
+ShakespeareAnalytics.java needs to be well documented. It must begin with the author's name and an overall description. Each line of code needs to be described in your own words.
+
+### Task 0.
+
+Using the count method of the JavaRDD class, display the number of lines in "All's Well That Ends Well".
+
+Write this output to the screen with System.out.println(). This output will be included in your pdf.
+
+### Task 1.
+
+Using the split method of the java String class and the flatMap method of the JavaRDD class,
+use the count method of the JavaRDD class to display the number of words in "All's Well That Ends Well". So that we are all on the same page, be sure to use
+the string "[^a-zA-Z]+" as the regular expression delimiter in your split method.
+
+In Task 1 and Task 2, you might also make good use of a filter function:
+
+```
+Function<String, Boolean> filter = k -> ( !k.isEmpty());
+
+```
+
+Write this output to the screen with System.out.println(). This output will be included in your pdf.
+
+
+### Task 2.
+
+Using some of the work you did above and the JavaRDD distinct() and count() methods, display
+the number of distinct words in "All's Well That Ends Well".
+
+Write this output to the screen with System.out.println(). This output will be included in your pdf.
+
+### Task 3.
+
+Use the split method with a regular expression of "" and a flatmap to find the number of symbols in "All's Well That Ends Well".
+
+Write this output to the screen with System.out.println(). This output will be included in your pdf.
+
+### Task 4.
+
+Find the number of distinct symbols in "All's Well That Ends Well".
+
+Write this output to the screen with System.out.println(). This output will be included in your pdf.
+
+### Task 5.
+
+Find the number of distinct letters in "All's Well That Ends Well".
+
+Write this output to the screen with System.out.println(). This output will be included in your pdf.
+
+### Task 6.
+
+This is an interactive piece. Ask your user to enter a word and show all of the lines of "All's Well That Ends Well" that contain that word. The search will be case-sensitive. If, for example, the user enters the word "love", she would see such lines as:
+
+```
+Attend his love.
+That I should love a bright particular star
+Th' ambition in my love thus plagues itself:
+:
+:
+
+```
+But she would see no lines with an uppercase "Love".
+
+Interact with the user and write this output to the screen with System.out.println(). This output will be included in your pdf.
+
+### Part 2 Summary
+
+Part 2 will be graded by carefully inspecting the single program and the output (including INFO lines).
+
+## Deliverables
+
+A grader may examine:
+
+* The single pdf file submitted to Gradescope.
+* Source code documentation in ShakespeareAnalytics.java.
+* Successful execution of ShakespeareAnalytics.java.
