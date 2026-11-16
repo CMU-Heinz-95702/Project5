@@ -551,10 +551,12 @@ place the Task0 output file in /home/student/Project5/Part_1/Task0/Task0Output.
 
 ## Autograder Concern
 
-All MapReduce programs must accept exactly two command-line arguments:
+In this project, all MapReduce programs must accept exactly two command-line arguments:
 
-Plain Text
+```
 <input-path> <output-path>
+
+```
 
 corresponding to the HDFS input and output paths. Programs must not hard-code HDFS paths. The grading system may use hidden datasets and HDFS directories that differ from those used during development.
 
