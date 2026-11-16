@@ -564,7 +564,7 @@ corresponding to the HDFS input and output paths. Programs must not hard-code HD
 # Task 0 - Word Count
 
 The file WordCount.java is found near the end of this assignment and is also available in
-the container's file system at:
+the container's file system. The file at this location 
 
 ```text
 /home/public/WordCount.java
