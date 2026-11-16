@@ -24,7 +24,7 @@ This project builds directly on the work completed in Lab 9. You will use the sa
 Part 1 will be graded automatically using Gradescope.
 
 Part 2 should be submitted as a single PDF document to Gradescope and will be evaluated through manual
-inspection of the .
+inspection of the PDF file.
 
 ---
 
