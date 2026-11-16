@@ -549,7 +549,7 @@ place the Task0 output file in /home/student/Project5/Part_1/Task0/Task0Output.
 
 ---
 
-## Auto-grader Concern
+## Autograder Concern
 
 All MapReduce programs must accept exactly two command-line arguments:
 
