@@ -1107,13 +1107,15 @@ This KML file only has one <placemark> element. Your solution will have many.
 ```text
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
+<Document>
 <Placemark>
   <Point>
     <coordinates>
       -79.9456,40.4406,0
     </coordinates>
   </Point>
-</Placemark>  
+</Placemark>
+</Document>
 </kml>
 ```
 
