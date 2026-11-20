@@ -673,7 +673,8 @@ We need input placed on HDFS.
 We will use the directory /home/student/input for input before moving it
 to HDFS.
 
-If you have not already done so, make the input directory on our local system:
+Make the input directory on our local system. No error is generated
+if the directory already exists.
 
 ```bash
 mkdir -p /home/student/input
