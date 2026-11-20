@@ -727,14 +727,16 @@ cat /home/student/Project5/Part_1/Task0/Task0Output
 
 ---
 
-Now, do the same with a larger file: words.txt.
+Now, do the same with a larger file: words.txt. The grader may test against
+the short file created above or against the longer words.txt.
 
 ## Deliverables
 
 A grader may examine:
 
 * Source code documentation in WordCount.java
-* Successful program compilation and execution
+* Successful program compilation and execution against either a short
+file or a larger one.
 
 The reducer output should be merged into a local file named:
 
