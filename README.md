@@ -608,12 +608,15 @@ Future tasks will follow a similar package naming convention.
 
 ## Complete these solution steps for Task0
 
-Create an HDFS input directory:
+We will test WordCount.java with a small file and then a larger file.
+
+If you have not already done so, create an HDFS input directory:
 
 ```bash
 hdfs dfs -mkdir -p /user/student/input
+
 ```
-Old files may be removed from HDFS with the following command. You will
+Old files should be removed from HDFS with the following command. You will
 get an error if there are no files to delete.
 
 ```bash
@@ -623,14 +626,9 @@ hdfs dfs -rm  /user/student/input/*
 We are using a standard directory for all of our input to MapReduce jobs
 on HDFS. We are using /user/student/input/ for input files.
 
-Copy an input file to HDFS:
-
-```bash
-hdfs dfs -copyFromLocal /home/public/words.txt /user/student/input/words.txt
-```
-
 We are using a standard directory for all of our output files generated from MapReduce jobs on HDFS. We are using /user/student/output/ for all of our output files on HDFS.
-Remove an existing output directory:
+
+Before running a new job, remove an existing output directory:
 
 ```bash
 hdfs dfs -rm -r -f /user/student/output
@@ -673,7 +671,7 @@ We need input placed on HDFS.
 We will use the directory /home/student/input for input before moving it
 to HDFS.
 
-Make the input directory on our local system:
+If you have not already done so, make the input directory on our local system:
 
 ```bash
 mkdir -p /home/student/input
@@ -690,7 +688,7 @@ printf "dog cat dog dog\n" > /home/student/input/test.txt
 Copy our local input to HDFS:
 
 ```
-hdfs dfs -copyFromLocal -f /home/student/input/test.txt /user/student/input
+hdfs dfs -copyFromLocal -f /home/student/input/test.txt /user/student/input/test.txt
 ```
 
 Remove any old output from HDFS:
@@ -728,6 +726,8 @@ cat /home/student/Project5/Part_1/Task0/Task0Output
 ```
 
 ---
+
+Now, do the same with a larger file: words.txt.
 
 ## Deliverables
 
