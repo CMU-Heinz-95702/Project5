@@ -610,25 +610,27 @@ Future tasks will follow a similar package naming convention.
 
 We will test WordCount.java with a small file and then a larger file.
 
-If you have not already done so, create an HDFS input directory:
+We are using a standard directory for all of our input to MapReduce jobs
+on HDFS. We are using /user/student/input/ for input files.
+
+Create an HDFS input directory (no error is generated if it already exists):
 
 ```bash
 hdfs dfs -mkdir -p /user/student/input
 
 ```
+
 Old files should be removed from HDFS with the following command. You will
-get an error if there are no files to delete.
+get an error if there are no files to delete (which is fine).
 
 ```bash
 hdfs dfs -rm  /user/student/input/*
 ```
 
-We are using a standard directory for all of our input to MapReduce jobs
-on HDFS. We are using /user/student/input/ for input files.
 
 We are using a standard directory for all of our output files generated from MapReduce jobs on HDFS. We are using /user/student/output/ for all of our output files on HDFS.
 
-Before running a new job, remove an existing output directory:
+Before running a new job, remove an existing output directory and any content:
 
 ```bash
 hdfs dfs -rm -r -f /user/student/output
